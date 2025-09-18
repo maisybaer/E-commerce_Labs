@@ -29,6 +29,10 @@ if(empty($email)||empty($password)){
 $user = login_user_ctr($email, $password);
 
 if ($user) {
+    $_SESSION['user_id']=$user['customer_id'];
+    $_SESSION['name']=$user['customer_name'];
+    $_SESSION['role']=$user['user_role'];
+
     $response['status'] = 'success';
     $response['message'] = 'Login successfully';
     $response['user'] = [

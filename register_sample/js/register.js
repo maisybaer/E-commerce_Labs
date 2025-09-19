@@ -6,9 +6,11 @@ $(document).ready(function() {
         email = $('#email').val();
         password = $('#password').val();
         phone_number = $('#phone_number').val();
+        country = $('#country').val();
+        city = $('#city').val();
         role = $('input[name="role"]:checked').val();
 
-        if (name == '' || email == '' || password == '' || phone_number == '') {
+        if (name == '' || email == '' || password == '' || phone_number == ''|| country == ''|| city == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -33,6 +35,8 @@ $(document).ready(function() {
                 name: name,
                 email: email,
                 password: password,
+                country: country,
+                city: city,
                 phone_number: phone_number,
                 role: role
             },

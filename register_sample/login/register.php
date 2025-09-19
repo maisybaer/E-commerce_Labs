@@ -152,6 +152,20 @@
                                 <label for="phone_number" class="form-label">Phone Number <i class="fa fa-phone"></i></label>
                                 <input type="text" class="form-control animate__animated animate__fadeInUp" id="phone_number" name="phone_number" required>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="country" class="form-label">Country <i class="fa fa-globe"></i></label>
+                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="country" name="country" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="city" class="form-label">City <i class="fa fa-city"></i></label>
+                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="city" name="city" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Your Image <i class="fa fa-phone"></i></label>
+                                <input type="file" class="form-control animate__animated animate__fadeInUp" id="image" name="image">
+                            </div>       
+
                             <div class="mb-4">
                                 <label class="form-label">Register As</label>
                                 <div class="d-flex justify-content-start">
@@ -180,7 +194,3 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/register.js">
-    </script>
-</body>
-
-</html>

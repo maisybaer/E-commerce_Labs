@@ -22,7 +22,7 @@ $password = $_POST['password'];
 $phone_number = $_POST['phone_number'];
 $role = $_POST['role'];
 
-$user_id = register_user_ctr($name, $email, $password, $phone_number, $role);
+$user_id = register_customer_ctr($name, $email, $password, $phone_number, $role);
 
 if ($user_id) {
     $response['status'] = 'success';

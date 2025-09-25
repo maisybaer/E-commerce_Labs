@@ -1,0 +1,15 @@
+FAKE USER
+
+Full Name: Ama Mensah
+
+Email: ama@example.com
+
+Password: Ama@123
+
+Country: Ghana
+
+City: Accra
+
+Phone Number: 0245678910
+
+Register As: Customer

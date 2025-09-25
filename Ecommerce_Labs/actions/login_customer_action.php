@@ -30,7 +30,7 @@ if(empty($email)||empty($password)){
     exit();
 }
 
-$user = login_user_ctr($email, $password);
+$user = login_customer_ctr($email, $password);
 
 if ($user) {
     $_SESSION['user_id']=$user['customer_id'];

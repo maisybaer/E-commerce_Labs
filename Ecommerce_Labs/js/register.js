@@ -3,6 +3,7 @@ $(document).ready(function() {
     $('#register-form').submit(function(e) {
         e.preventDefault();
 
+<<<<<<< HEAD:Ecommerce_Labs/js/register.js
         let name = $('#name').val();
         let email = $('#email').val();
         let password = $('#password').val();
@@ -13,6 +14,17 @@ $(document).ready(function() {
         let role = $('input[name="role"]:checked').val();
 
         if (name == '' || email == '' || password == '' ||country == ''|| city == ''|| phone_number == '') {
+=======
+        name = $('#name').val();
+        email = $('#email').val();
+        password = $('#password').val();
+        phone_number = $('#phone_number').val();
+        country = $('#country').val();
+        city = $('#city').val();
+        role = $('input[name="role"]:checked').val();
+
+        if (name == '' || email == '' || password == '' || phone_number == ''|| country == ''|| city == '') {
+>>>>>>> d5334321ca3a02752207d940ed6f501b78e31925:register_sample/js/register.js
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -55,10 +67,22 @@ $(document).ready(function() {
         $.ajax({
             url: '../actions/register_customer_action.php',
             type: 'POST',
+<<<<<<< HEAD:Ecommerce_Labs/js/register.js
             data: formData,
             contentType: false,
             processData:false,
             dataType: 'json',
+=======
+            data: {
+                name: name,
+                email: email,
+                password: password,
+                country: country,
+                city: city,
+                phone_number: phone_number,
+                role: role
+            },
+>>>>>>> d5334321ca3a02752207d940ed6f501b78e31925:register_sample/js/register.js
             success: function(response) {
                 if (response.status === 'success') {
                     Swal.fire({

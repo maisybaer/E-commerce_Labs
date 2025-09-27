@@ -1,10 +1,15 @@
 <?php
-session_start(); 
-
 require_once 'settings/core.php';
 
-$user_id=getUserID();
-$role=checkRole($user_id);
+// check login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login/login.php");
+    exit;
+}
+
+// get user info
+$user_id = getUserID();
+$role = getUserRole();
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +39,7 @@ $role=checkRole($user_id);
 	<div class="menu-tray">
 		<span class="me-2">Menu:</span>
 		<?php if (isset($_SESSION['user_id'])): ?>
-			<a href="login/login.php" class="btn btn-sm btn-outline-secondary">Logout</a>
+			<a href="login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
 		<?php else: ?>
 			<a href="login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
 			<a href="login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
@@ -44,15 +49,14 @@ $role=checkRole($user_id);
 	<div class="container" style="padding-top:120px;">
 		<div class="text-center">
 
-			<?php
-			if ($role == 1) {
-				echo "<h1>Welcome Admin!</h1>";
-			} elseif ($role == 2) {
-				echo "<h1>Welcome Customer!</h1>";
-			} else {
+            <?php if ($role == 1) : ?>  
+				<h1>Welcome Admin!</h1>
+                <a href="admin/category.php" class="btn btn-sm btn-outline-primary">Category</a>
+            <?php elseif ($role == 2) : ?> 
+				<h1>Welcome Customer!</h1>
+			<?php endif; ?>
 
-			}
-			?>
+		
 			
 			<?php if (isset($_SESSION['user_id'])): ?>
 				<p class="text-muted">Use the menu in the top-right to Logout.</p>			

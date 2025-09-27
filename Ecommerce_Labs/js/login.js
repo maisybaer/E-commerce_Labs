@@ -5,6 +5,11 @@ $(document).ready(function() {
         email = $('#email').val();
         password = $('#password').val();
 
+        //takes user to index page if they have already logged in
+        if (response.status === 'error' && response.message === 'You are already logged in') {
+            window.location.href = '../index.php';
+        }
+
         //checks if fields are empty
         if (email == '' || password == '') {
             Swal.fire({
@@ -19,12 +24,12 @@ $(document).ready(function() {
         $.ajax({
             url: '../actions/login_customer_action.php',
             type: 'POST',
+            dataType:"json",
             data: {
-
                 email: email,
                 password: password,
-
             },
+
             success: function(response) {
                 if (response.status === 'success') {
                     Swal.fire({

@@ -6,13 +6,6 @@ session_start();
 
 $response = array();
 
-// TODO: Check if the user is already logged in and redirect to the dashboard
-if (isset($_SESSION['user_id'])) {
-    $response['status'] = 'error';
-    $response['message'] = 'You are already logged in';
-    echo json_encode($response);
-    exit();
-}
 
 require_once '../controllers/customer_controller.php';
 
@@ -33,9 +26,6 @@ if (empty($name)||empty($email)||empty($password)||empty($country)||empty($phone
     echo json_encode($response);
     exit();
 }
-
-
-
 
 
 // For image upload

@@ -23,10 +23,10 @@ class Customer extends db_connection
     }
 
     //function to edit customer
-    public function editCustomer($name,$email,$country,$city,$phone_number,$role,$user_image)
+    public function editCustomer($user_id,$name,$email,$country,$city,$phone_number,$role,$user_image)
     {
         $stmt = $this->db->prepare("UPDATE customer SET customer_name=?,customer_email=?,customer_country=?,customer_city=?,customer_contact=?,user_role=?,customer_image=? WHERE customer_id=?");
-        $stmt->bind_param("sssssss",$name, $email,$country,$city,$phone_number,$role);
+        $stmt->bind_param("isssssss",$user_id,$name, $email,$country,$city,$phone_number,$role);
         return $stmt->execute();
     }
 

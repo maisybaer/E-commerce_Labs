@@ -1,36 +1,34 @@
 <?php
 
 header('Content-Type: application/json');
-
 session_start();
-$_SESSION = [];
+var_dump($_SESSION);
 
-session_destroy();
+require_once '../classes/customer_class.php';
+require_once '../controllers/customer_controller.php';
 
-$response = array();
-
-// TODO: Check if the user is already logged in and redirect to the dashboard
+// Check if the user is already logged in and redirect to the dashboard
 if (isset($_SESSION['user_id'])) {
     $response['status'] = 'error';
     $response['message'] = 'You are already logged in';
     echo json_encode($response);
-    header('Location:../index.php');
     exit();
 }
-
-require_once '../controllers/customer_controller.php';
 
 $email = $_POST['email'];
 $password = $_POST['password'];
 
+//Checks if user inputs are typed in
 if(empty($email)||empty($password)){
     $response['status']='error';
-    $respone['message']='Please type your email and password';
+    $response['message']='Please type your email and password';
     echo json_encode($response);
     exit();
 }
 
+//logs in user
 $user = login_user_ctr($email, $password);
+
 
 if ($user) {
     $_SESSION['user_id']=$user['customer_id'];

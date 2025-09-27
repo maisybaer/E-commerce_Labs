@@ -78,4 +78,15 @@ document.addEventListener("DOMContentLoaded", () => {
             loadCategories();
         });
     };
+
+    //form interactivity
+    function openForm() {
+        document.getElementById("updateCatForm").style.display = "block";
+    }
+
+    function closeForm() {
+        document.getElementById("updateCatForm").style.display = "none";
+    }
+
+
 });

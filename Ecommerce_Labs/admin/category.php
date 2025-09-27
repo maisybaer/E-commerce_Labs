@@ -21,7 +21,6 @@ $db = new db_connection();
 
 ?>
 
-//webpage
 
 <!DOCTYPE html>
 <html lang="en">
@@ -143,6 +142,19 @@ $db = new db_connection();
                 opacity: 1;
             }
         }
+
+        .form-popup {
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 50px; 
+        }
     </style>
 </head>
 
@@ -174,8 +186,8 @@ $db = new db_connection();
                     <div class="card-body">
                         <form method="POST" action="" class="mt-4" id="addCatForm">
                             <div class="mb-3">
-                            <label for="catName" class="form-label">Category Name</label>
-                            <input type="text" class="form-control animate__animated animate__fadeInUp" id="catName" name="catName" required>
+                                <label for="catName" class="form-label">Category Name</label>
+                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="catName" name="catName" required>
                             </div>
 
                             <button type="submit" class="btn btn-custom w-100 animate-pulse-custom">Add New Category</button>
@@ -205,8 +217,19 @@ $db = new db_connection();
                                 <th>insert ID</th>
                                 <th>insert Name</th>
                                 <th>
-                                    <button class="small btn btn-custom w-100 animate-pulse-custom">Edit Category</button>
-                                    <button class="small btn btn-custom w-100 animate-pulse-custom">Delete Category</button>
+                                    <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
+                                      
+                                    <!--pop-up form to edit  categories-->
+                                        <div class="card-body">
+                                            <div class="form-popup" method="POST" action="" class="mt-4" id="UpdateCatForm">
+                                                <div class="mb-3">
+                                                    <label for="catName" class="form-label">Edit</label>
+                                                     <input type="text" class="form-control animate__animated animate__fadeInUp" id="catName" name="catName" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <button class="small btn btn-custom w-100 animate-pulse-custom">Delete</button>
                                 </th>
                             </tbody>
 

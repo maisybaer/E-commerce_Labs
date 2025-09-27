@@ -15,6 +15,3 @@ function register_user_ctr($name, $email, $password,$country,$city, $phone_numbe
     $customer = new Customer();
     return $customer->addCustomer($name, $email, $password,$country,$city, $phone_number, $role,$user_image);
 }
-
-
-

@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     $('#register-form').submit(function(e) {
         e.preventDefault();
@@ -12,7 +11,7 @@ $(document).ready(function() {
         let user_image = $('#user_image')[0].files[0];
         let role = $('input[name="role"]:checked').val();
 
-        if (name == '' || email == '' || password == '' || phone_number == ''|| country == ''|| city == '') {
+        if (name == '' || email == '' || password == '' ||country == ''|| city == ''|| phone_number == '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

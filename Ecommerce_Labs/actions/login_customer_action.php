@@ -2,7 +2,6 @@
 
 header('Content-Type: application/json');
 session_start();
-var_dump($_SESSION);
 
 require_once '../classes/customer_class.php';
 require_once '../controllers/customer_controller.php';
@@ -11,7 +10,7 @@ require_once '../controllers/customer_controller.php';
 if (isset($_SESSION['user_id'])) {
     $response['status'] = 'error';
     $response['message'] = 'You are already logged in';
-    echo json_encode($response);
+    header('Location:../index.php');
     exit();
 }
 

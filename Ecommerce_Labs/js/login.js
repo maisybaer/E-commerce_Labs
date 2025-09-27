@@ -2,8 +2,8 @@ $(document).ready(function() {
     $('#login-form').submit(function(e) {
         e.preventDefault();
 
-        email = $('#email').val();
-        password = $('#password').val();
+        let email = $('#email').val();
+        let password = $('#password').val();
 
         //checks if fields are empty
         if (email == '' || password == '') {

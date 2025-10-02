@@ -8,9 +8,10 @@ require_once '../controllers/customer_controller.php';
 
 // Check if the user is already logged in and redirect to the dashboard
 if (isset($_SESSION['user_id'])) {
-    $response['status'] = 'error';
+    $response['status'] = 'redirect';
     $response['message'] = 'You are already logged in';
-    header('Location:../index.php');
+    $response['redirect_url'] = '../index.php';
+    echo json_encode($response);
     exit();
 }
 

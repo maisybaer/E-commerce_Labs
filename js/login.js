@@ -36,6 +36,10 @@ $(document).ready(function() {
                             window.location.href = '../index.php';
                         }
                     });
+                
+                }else if(response.status === 'redirect') {
+                    window.location.href = response.redirect_url;
+                
                 } else {
                     Swal.fire({
                         icon: 'error',

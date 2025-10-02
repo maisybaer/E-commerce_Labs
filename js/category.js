@@ -29,21 +29,38 @@ document.addEventListener("DOMContentLoaded", () => {
     loadCategories();
 
     // Add category
-    form.addEventListener("submit", e => {
+    $('#register-form').submit(function(e) {
         e.preventDefault();
-        let formData = new FormData(form);
 
-        fetch("../actions/add_category_action.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(res => res.json())
-        .then(resp => {
-            alert(resp.message);
-            loadCategories();
-            form.reset();
-        });
-    });
+        let cat_name = $('#cat_name').val();
+        let user_id = $('#user_id').val();
+
+        if (cat_name == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please fill the name of your new category!',
+            });
+
+        let formData = new FormData();
+        formData.append('cat_name', cat_name);
+        formData.append('user_id', user_id);
+
+    //form.addEventListener("submit", e => {
+    //    e.preventDefault();
+    //    let formData = new FormData(form);
+    //
+        //fetch("../actions/add_category_action.php", {
+        //    method: "POST",
+        //    body: formData
+        //})
+        //.then(res => res.json())
+        //.then(resp => {
+         //   alert(resp.message);
+        //    loadCategories();
+       //     form.reset();
+     //   });
+   // });
 
     // Update category
     window.updateCategory = function (cat_id) {

@@ -37,9 +37,11 @@ $role = getUserRole();
 <body>
 
 	<div class="menu-tray">
-		<span class="me-2">Menu:</span>
 		<?php if (isset($_SESSION['user_id'])): ?>
+			
+			<a href="index.php" class="btn btn-sm btn-outline-secondary">Home</a>
 			<a href="login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
+
 		<?php else: ?>
 			<a href="login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
 			<a href="login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
@@ -51,7 +53,10 @@ $role = getUserRole();
 
             <?php if ($role == 1) : ?>  
 				<h1>Welcome Admin!</h1>
-                <a href="admin/category.php" class="btn btn-sm btn-outline-primary">Category</a>
+                <a href="admin/category.php" class="btn btn-sm btn-outline-primary">Categories</a>
+				<a href="admin/category.php" class="btn btn-sm btn-outline-primary">Products</a>
+				<a href="admin/category.php" class="btn btn-sm btn-outline-primary">Customers</a>
+				<a href="admin/category.php" class="btn btn-sm btn-outline-primary">Orders</a>
             <?php elseif ($role == 2) : ?> 
 				<h1>Welcome Customer!</h1>
 			<?php endif; ?>

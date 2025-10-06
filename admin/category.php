@@ -215,8 +215,8 @@ $db = new db_connection();
                                 </tr>
                             </thead>
                             <tbody>
-                                <tb>No categories available</tb>
-                                    <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
+                                <td>No categories available</td>
+                                <td><button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button></td>
                                       
                                     <!--pop-up form to edit  categories-->
                                         <div class="card-body">

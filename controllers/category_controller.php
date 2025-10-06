@@ -10,10 +10,10 @@ function add_cat_ctr($cat_name,$user_id)
 }
 
 //update category controller
-function update_cat_ctr($cat_id,$cat_name)
+function update_cat_ctr($cat_id,$cat_name, $user_id)
 {
     $cat = new Category();
-    return $cat->updateCat($cat_id,$cat_name);
+    return $cat->updateCat($cat_id,$cat_name,$user_id);
 }
 
 //delete category controller

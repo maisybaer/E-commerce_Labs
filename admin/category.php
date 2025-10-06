@@ -187,7 +187,8 @@ $db = new db_connection();
                         <form method="POST" action="" class="mt-4" id="addCatForm">
                             <div class="mb-3">
                                 <label for="catName" class="form-label">Category Name</label>
-                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="catName" name="catName" required>
+                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="cat_name" name="cat_name" required>
+                                <input type="hidden" id="user_id" name="user_id" value="<?php echo $_SESSION['user_id'] ?? ''; ?>">
                             </div>
 
                             <button type="submit" class="btn btn-custom w-100 animate-pulse-custom">Add New Category</button>
@@ -214,8 +215,7 @@ $db = new db_connection();
                                 </tr>
                             </thead>
                             <tbody>
-                                <th placeholder="No categories available"></th>
-                                <th>
+                                <tb>No categories available</tb>
                                     <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
                                       
                                     <!--pop-up form to edit  categories-->

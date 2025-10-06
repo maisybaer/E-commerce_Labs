@@ -214,8 +214,7 @@ $db = new db_connection();
                                 </tr>
                             </thead>
                             <tbody>
-                                <th>insert ID</th>
-                                <th>insert Name</th>
+                                <th placeholder="No categories available"></th>
                                 <th>
                                     <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
                                       

@@ -71,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.updateCategory = function (cat_id) {
         let cat_name = document.getElementById(`cat-${cat_id}`).value;
         let formData = new FormData();
-        formData.append("cat_id", cat_id);
         formData.append("cat_name", cat_name);
 
         fetch("../actions/update_category_action.php", {

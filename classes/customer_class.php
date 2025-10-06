@@ -11,6 +11,9 @@ class Customer extends db_connection
     public function __construct()
     {
         parent::db_connect();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
     }
 
     //function to add customer
@@ -49,6 +52,15 @@ class Customer extends db_connection
         return $result;
 
         }
+
+    //function to get customer via id
+    public function getUserId()
+    {
+        if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
+            return $_SESSION['user_id'];
+        }
+        return null; // Return null if not logged in
+    }
 
      //function to verify login by checking
     public function verifyLogin($email, $password)

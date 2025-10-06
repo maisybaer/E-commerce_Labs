@@ -19,10 +19,10 @@ class Category extends db_connection
     }
 
     //function to update category
-    public function updateCat($cat_id,$cat_name, $user_id)
+    public function updateCat($cat_id,$cat_name)
     {
         $stmt = $this->db->prepare("UPDATE categories SET cat_name WHERE cat_id=?");
-        $stmt->bind_param("si",$cat_name, $user_id);
+        $stmt->bind_param("s",$cat_name);
         return $stmt->execute();
     }
 

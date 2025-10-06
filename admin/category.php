@@ -164,7 +164,7 @@ $db = new db_connection();
 		<?php if (isset($_SESSION['user_id'])): ?>
 			<a href="login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
 		<?php else: ?>
-			<a href="login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
+			<a href="index.php" class="btn btn-sm btn-outline-primary">Home</a>
 			<a href="login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
 		<?php endif; ?>			
 	</div>
@@ -216,7 +216,9 @@ $db = new db_connection();
                             </thead>
                             <tbody>
                                 <td>No categories available</td>
-                                <td><button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button></td>
+                                <td></td>
+                                <td>
+                                    <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
                                       
                                     <!--pop-up form to edit  categories-->
                                         <div class="card-body">
@@ -229,7 +231,7 @@ $db = new db_connection();
                                         </div>
 
                                     <button class="small btn btn-custom w-100 animate-pulse-custom">Delete</button>
-                                </th>
+                                </td>
                             </tbody>
 
                         </table>

@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadCategories();
 
     // Add category
-    $('#register-form').submit(function(e) {
+    $('#addCatForm').submit(function(e) {
         e.preventDefault();
 
         let cat_name = $('#cat_name').val();
@@ -42,25 +42,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 text: 'Please fill the name of your new category!',
             });
 
+                return;
+        }
+
         let formData = new FormData();
         formData.append('cat_name', cat_name);
         formData.append('user_id', user_id);
 
-    //form.addEventListener("submit", e => {
-    //    e.preventDefault();
-    //    let formData = new FormData(form);
-    //
-        //fetch("../actions/add_category_action.php", {
-        //    method: "POST",
-        //    body: formData
-        //})
-        //.then(res => res.json())
-        //.then(resp => {
-         //   alert(resp.message);
-        //    loadCategories();
-       //     form.reset();
-     //   });
-   // });
+        fetch("../actions/add_category_action.php", {
+            method: "POST",
+            body: formData
+        })
+
+        .then(res => res.json())
+        .then(resp => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Added!',
+                text: resp.message,
+            });
+        
+            loadCategories();
+            $('#addCatForm')[0].reset();
+        });
+    });
 
     // Update category
     window.updateCategory = function (cat_id) {
@@ -97,13 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     //form interactivity
-    function openForm() {
+    window.openForm = function () {
         document.getElementById("updateCatForm").style.display = "block";
-    }
+    };
 
-    function closeForm() {
+    window.closeForm = function () {
         document.getElementById("updateCatForm").style.display = "none";
-    }
-
-
-});
+    };
+});    

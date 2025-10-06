@@ -1,5 +1,6 @@
 <?php
 require_once '../controllers/category_controller.php';
+require_once '../settings/core.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

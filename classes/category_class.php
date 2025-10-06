@@ -34,17 +34,6 @@ class Category extends db_connection
         return $stmt->execute();
     }
 
-    //function to get categories based on user ID
-    public function getCat($user_id)
-    {
-
-        $stmt = $this->db->prepare("SELECT * FROM categories WHERE added_by = ?");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result->fetch_all(MYSQLI_ASSOC);
-
-        }
 
 
 

@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cat_name = $_POST['cat_name'] ?? '';
-    $user_id = getUserID();
+    $user_id = $_POST['user_id'] ?? '';
 
     if (!empty($cat_name) && !empty($user_id)) {
         $result = add_cat_ctr($cat_name, $user_id);

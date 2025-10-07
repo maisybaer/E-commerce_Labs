@@ -65,37 +65,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Inline Edit Category
-    window.editCategory = function (cat_id, cat_name) {
-        const nameCell = document.getElementById(`catName-${cat_id}`);
-        const row = document.getElementById(`row-${cat_id}`);
+    // Update category
+    // Open popup for update
+    window.updateCategory = function(cat_id) {
+        // Get the current category name from the table cell
+        const currentName = document.querySelector(`tr td:nth-child(2):has(+ td button[onclick="updateCategory(${cat_id})"])`)?.innerText;
 
-        // Replace text with input box
-        nameCell.innerHTML = `<input type="text" id="editInput-${cat_id}" value="${cat_name}" class="form-control" />`;
-
-        // Replace buttons with save and cancel
-        row.children[2].innerHTML = `
-            <button class="btn btn-success btn-sm" onclick="saveCategory(${cat_id})">Save</button>
-            <button class="btn btn-secondary btn-sm" onclick="cancelEdit(${cat_id}, '${cat_name}')">Cancel</button>
-        `;
+        document.getElementById("update_cat_id").value = cat_id;
+        document.getElementById("update_cat_name").value = currentName || "";
+        document.getElementById("updatePopup").style.display = "flex";
     };
 
-    // Save Edited Category
-    window.saveCategory = function (cat_id) {
-        const newName = document.getElementById(`editInput-${cat_id}`).value.trim();
+    // Close popup
+    document.getElementById("cancelUpdate").addEventListener("click", function() {
+        document.getElementById("updatePopup").style.display = "none";
+    });
 
-        if (newName === "") {
+    // Save update
+    document.getElementById("saveUpdate").addEventListener("click", function() {
+        const cat_id = document.getElementById("update_cat_id").value;
+        const cat_name = document.getElementById("update_cat_name").value;
+
+        if (cat_name.trim() === "") {
             Swal.fire({
-                icon: "error",
-                title: "Empty Field",
-                text: "Category name cannot be empty!",
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Category name cannot be empty!',
             });
             return;
         }
 
         let formData = new FormData();
         formData.append("cat_id", cat_id);
-        formData.append("cat_name", newName);
+        formData.append("cat_name", cat_name);
 
         fetch("../actions/update_category_action.php", {
             method: "POST",
@@ -104,25 +106,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(res => res.json())
         .then(resp => {
             Swal.fire({
-                icon: resp.status === "success" ? "success" : "error",
-                title: resp.status === "success" ? "Updated!" : "Error",
+                icon: 'success',
+                title: 'Updated!',
                 text: resp.message,
             });
+            document.getElementById("updatePopup").style.display = "none";
             loadCategories();
-        });
-    };
-
-    // Cancel Edit
-    window.cancelEdit = function (cat_id, oldName) {
-        const nameCell = document.getElementById(`catName-${cat_id}`);
-        const row = document.getElementById(`row-${cat_id}`);
-
-        nameCell.textContent = oldName;
-        row.children[2].innerHTML = `
-            <button class="btn btn-sm btn-primary" onclick="editCategory(${cat_id}, '${oldName}')">Edit</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteCategory(${cat_id})">Delete</button>
-        `;
-    };
+        })
+        .catch(err => console.error(err));
+    });
 
     // Delete category
     window.deleteCategory = function (cat_id) {

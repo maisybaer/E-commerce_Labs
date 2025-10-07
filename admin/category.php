@@ -3,18 +3,8 @@
 require_once '../settings/core.php';
 require_once '../settings/db_class.php';
 
-//checks if user is logged in
-//checkLogin($email, $password);
-
-
-//checks if user is not an admin
-//$user_id = getUserID();
-//$role = getUserRole();
-
-//if ($role !== '1') {
-//    header("Location: ../login/login.php");
-//    exit();
-//}
+$user_id = getUserID();
+$role = getUserRole();
 
 
 $db = new db_connection();
@@ -146,7 +136,7 @@ $db = new db_connection();
         .form-popup {
             display: none; 
             position: fixed;
-            z-index: 1; 
+            z-index: 1000; 
             left: 0;
             top: 0;
             width: 100%; 
@@ -154,6 +144,8 @@ $db = new db_connection();
             overflow: auto;
             background-color: rgba(0,0,0,0.4); 
             padding-top: 50px; 
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
@@ -162,10 +154,10 @@ $db = new db_connection();
 	<div class="menu-tray">
 		<span class="me-2">Menu:</span>
 		<?php if (isset($_SESSION['user_id'])): ?>
-			<a href="..login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
+			<a href="../login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
 		<?php else: ?>
-			<a href="..index.php" class="btn btn-sm btn-outline-primary">Home</a>
-			<a href="..login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
+			<a href="../index.php" class="btn btn-sm btn-outline-primary">Home</a>
+			<a href="../login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
 		<?php endif; ?>			
 	</div>
 
@@ -219,6 +211,24 @@ $db = new db_connection();
                                 <td></td>
                                 <td>
                                     <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
+                                        <!-- Update Category Popup -->
+                                            <div id="updatePopup" class="form-popup">
+                                                <div class="card mx-auto p-4" style="max-width: 400px; background-color: #fff; border-radius: 10px;">
+                                                    <h5 class="text-center mb-3 highlight">Update Category</h5>
+                                                    <form id="updateForm">
+                                                        <div class="mb-3">
+                                                            <label for="update_cat_name" class="form-label">New Category Name</label>
+                                                            <input type="text" class="form-control" id="update_cat_name" required>
+                                                            <input type="hidden" id="update_cat_id">
+                                                        </div>
+                                                        <div class="d-flex justify-content-between">
+                                                            <button type="button" id="saveUpdate" class="btn btn-custom">Save</button>
+                                                            <button type="button" id="cancelUpdate" class="btn btn-secondary">Cancel</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
                                     <button class="small btn btn-custom w-100 animate-pulse-custom">Delete</button>
                                 </td>
                             </tbody>

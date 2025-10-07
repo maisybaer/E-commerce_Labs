@@ -147,6 +147,19 @@ $db = new db_connection();
             justify-content: center;
             align-items: center;
         }
+
+        .menu-tray {
+			position: fixed;
+			top: 16px;
+			right: 16px;
+			background: rgba(255,255,255,0.95);
+			border: 1px solid #e6e6e6;
+			border-radius: 8px;
+			padding: 6px 10px;
+			box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+			z-index: 1000;
+		}
+		.menu-tray a { margin-left: 8px; }
     </style>
 </head>
 
@@ -154,9 +167,10 @@ $db = new db_connection();
 	<div class="menu-tray">
 		<span class="me-2">Menu:</span>
 		<?php if (isset($_SESSION['user_id'])): ?>
+            <a href="../index.php" class="btn btn-sm btn-outline-primary">Home</a>
 			<a href="../login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
 		<?php else: ?>
-			<a href="../index.php" class="btn btn-sm btn-outline-primary">Home</a>
+            <a href="../index.php" class="btn btn-sm btn-outline-primary">Home</a>
 			<a href="../login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
 		<?php endif; ?>			
 	</div>

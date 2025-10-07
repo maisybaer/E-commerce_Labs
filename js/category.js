@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Pop-up edit logic
+    // Update Category (Pop up form)
     let currentEditCatId = null;
 
     function createEditPopup() {
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Expose openForm globally for inline button
     window.openForm = openForm;
 
-    // Initial setup
+    // Initial setup 
     createEditPopup();
     closeForm();
     loadCategories();

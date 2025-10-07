@@ -21,9 +21,9 @@ class Category extends db_connection
     //function to update category
     public function updateCat($cat_id,$cat_name)
     {
-        $stmt = $this->db->prepare("UPDATE categories SET cat_name WHERE cat_id=?");
-        $stmt->bind_param("si",$cat_name,$cat_id);
-        return $stmt->execute();
+    $stmt = $this->db->prepare("UPDATE categories SET cat_name = ? WHERE cat_id = ?");
+    $stmt->bind_param("si", $cat_name, $cat_id);
+    return $stmt->execute();
     }
 
     //function to delete customer

@@ -169,10 +169,10 @@ $db = new db_connection();
 		<?php if (isset($_SESSION['user_id'])): ?>
             <a href="../index.php" class="btn btn-sm btn-outline-primary">Home</a>
 			<a href="../login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
-            <p>Login to see your Categories</p>
 		<?php else: ?>
             <a href="../index.php" class="btn btn-sm btn-outline-primary">Home</a>
 			<a href="../login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
+            <p><br>Login to see your Categories</p>
 		<?php endif; ?>			
 	</div>
 
@@ -237,7 +237,7 @@ $db = new db_connection();
                                                             <input type="hidden" id="update_cat_id">
                                                         </div>
                                                         <div class="d-flex justify-content-between">
-                                                            <button type="button" id="saveUpdate" class="btn btn-custom">Save</button>
+                                                            <button type="submit" id="saveUpdate" class="btn btn-custom">Save</button>
                                                             <button type="button" id="cancelUpdate" class="btn btn-secondary">Cancel</button>
                                                         </div>
                                                     </form>

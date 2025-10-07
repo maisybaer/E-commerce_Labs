@@ -209,8 +209,8 @@ $db = new db_connection();
                         <table id="catTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
+                                    <th>Category ID</th>
+                                    <th>Category Name</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

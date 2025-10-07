@@ -12,9 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     let row = `
                         <tr>
                             <td>${cat.cat_id}</td>
-                            <td>
-                                <input type="text" value="${cat.cat_name}" id="cat-${cat.cat_id}">
-                            </td>
+                            <td>${cat.cat_name}</td>
                             <td>
                                 <button onclick="updateCategory(${cat.cat_id})">Update</button>
                                 <button onclick="deleteCategory(${cat.cat_id})">Delete</button>
@@ -101,6 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     //form interactivity
+    
+
     window.openForm = function () {
         document.getElementById("updateCatForm").style.display = "block";
     };

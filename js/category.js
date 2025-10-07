@@ -1,30 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     const tableBody = document.querySelector("#catTable tbody");
-    const form = document.getElementById("addCatForm");
-
-    // Fetch categories
-    function loadCategories() {
-        fetch("../actions/fetch_category_action.php")
-            .then(res => res.json())
-            .then(data => {
-                tableBody.innerHTML = "";
-                data.forEach(cat => {
-                    let row = `
-                        <tr>
-                            <td>${cat.cat_id}</td>
-                            <td>${cat.cat_name}</td>
-                            <td>
-                                <button onclick="updateCategory(${cat.cat_id})">Update</button>
-                                <button onclick="deleteCategory(${cat.cat_id})">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                    tableBody.innerHTML += row;
-                });
-            });
-    }
-
-    loadCategories();
 
     // Add category
     $('#addCatForm').submit(function(e) {
@@ -39,8 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 title: 'Oops...',
                 text: 'Please fill the name of your new category!',
             });
-
-                return;
+            return;
         }
 
         let formData = new FormData();
@@ -51,7 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
             method: "POST",
             body: formData
         })
-
         .then(res => res.json())
         .then(resp => {
             Swal.fire({
@@ -59,62 +32,95 @@ document.addEventListener("DOMContentLoaded", () => {
                 title: 'Added!',
                 text: resp.message,
             });
-        
             loadCategories();
             $('#addCatForm')[0].reset();
         });
     });
 
-    // Update category
-    // Open popup for update
-    window.updateCategory = function(cat_id) {
-        // Get the current category name from the table cell
-        const currentName = document.querySelector(`tr td:nth-child(2):has(+ td button[onclick="updateCategory(${cat_id})"])`)?.innerText;
+    // Pop-up edit logic
+    let currentEditCatId = null;
 
-        document.getElementById("update_cat_id").value = cat_id;
-        document.getElementById("update_cat_name").value = currentName || "";
-        document.getElementById("updatePopup").style.display = "flex";
-    };
+    function createEditPopup() {
+        if (document.getElementById("updateCatForm")) return;
+        let popup = document.createElement("div");
+        popup.className = "form-popup";
+        popup.id = "updateCatForm";
+        popup.style.display = "none";
+        popup.innerHTML = `
+            <div class="card" style="max-width:400px;margin:auto;">
+                <div class="card-body">
+                    <form id="editCatForm">
+                        <div class="mb-3">
+                            <label for="editCatName" class="form-label">Edit Category Name</label>
+                            <input type="text" class="form-control" id="editCatName" name="editCatName" required>
+                        </div>
+                        <button type="submit" class="btn btn-custom w-100">Update</button>
+                        <button type="button" class="btn btn-secondary w-100 mt-2" id="closeEditPopup">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(popup);
 
-    // Close popup
-    document.getElementById("cancelUpdate").addEventListener("click", function() {
-        document.getElementById("updatePopup").style.display = "none";
-    });
+        document.getElementById("closeEditPopup").onclick = closeForm;
 
-    // Save update
-    document.getElementById("saveUpdate").addEventListener("click", function() {
-        const cat_id = document.getElementById("update_cat_id").value;
-        const cat_name = document.getElementById("update_cat_name").value;
+        document.getElementById("editCatForm").onsubmit = function(e) {
+            e.preventDefault();
+            let cat_name = document.getElementById("editCatName").value;
+            let formData = new FormData();
+            formData.append("cat_id", currentEditCatId);
+            formData.append("cat_name", cat_name);
 
-        if (cat_name.trim() === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Category name cannot be empty!',
+            fetch("../actions/update_category_action.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(resp => {
+                alert(resp.message);
+                closeForm();
+                loadCategories();
             });
-            return;
-        }
+        };
+    }
 
-        let formData = new FormData();
-        formData.append("cat_id", cat_id);
-        formData.append("cat_name", cat_name);
+    function openForm(cat_id, cat_name) {
+        currentEditCatId = cat_id;
+        let popup = document.getElementById("updateCatForm");
+        document.getElementById("editCatName").value = cat_name;
+        popup.style.display = "block";
+    }
 
-        fetch("../actions/update_category_action.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(res => res.json())
-        .then(resp => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Updated!',
-                text: resp.message,
+    function closeForm() {
+        let popup = document.getElementById("updateCatForm");
+        popup.style.display = "none";
+    }
+
+    // Fetch categories
+    function loadCategories() {
+        fetch("../actions/fetch_category_action.php")
+            .then(res => res.json())
+            .then(data => {
+                tableBody.innerHTML = "";
+                if (data.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="3">No categories available</td></tr>`;
+                } else {
+                    data.forEach(cat => {
+                        let row = `
+                            <tr>
+                                <td>${cat.cat_id}</td>
+                                <td>${cat.cat_name}</td>
+                                <td>
+                                    <button onclick="openForm(${cat.cat_id}, '${cat.cat_name.replace(/'/g, "\\'")}')" class="btn btn-custom btn-sm">Edit</button>
+                                    <button onclick="deleteCategory(${cat.cat_id})" class="btn btn-danger btn-sm">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                }
             });
-            document.getElementById("updatePopup").style.display = "none";
-            loadCategories();
-        })
-        .catch(err => console.error(err));
-    });
+    }
 
     // Delete category
     window.deleteCategory = function (cat_id) {
@@ -132,4 +138,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-});    
+    // Expose openForm globally for inline button
+    window.openForm = openForm;
+
+    // Initial setup
+    createEditPopup();
+    closeForm();
+    loadCategories();
+});

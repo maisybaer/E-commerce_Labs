@@ -219,17 +219,6 @@ $db = new db_connection();
                                 <td></td>
                                 <td>
                                     <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
-                                      
-                                    <!--pop-up form to edit  categories-->
-                                        <div class="card-body">
-                                            <div class="form-popup" method="POST" action="" class="mt-4" id="UpdateCatForm">
-                                                <div class="mb-3">
-                                                    <label for="catName" class="form-label">Edit</label>
-                                                     <input type="text" class="form-control animate__animated animate__fadeInUp" id="catName" name="catName" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     <button class="small btn btn-custom w-100 animate-pulse-custom">Delete</button>
                                 </td>
                             </tbody>

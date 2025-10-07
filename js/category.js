@@ -65,11 +65,37 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Update category
-    window.updateCategory = function (cat_id) {
-        let cat_name = document.getElementById(`cat-${cat_id}`).value;
+    // Inline Edit Category
+    window.editCategory = function (cat_id, cat_name) {
+        const nameCell = document.getElementById(`catName-${cat_id}`);
+        const row = document.getElementById(`row-${cat_id}`);
+
+        // Replace text with input box
+        nameCell.innerHTML = `<input type="text" id="editInput-${cat_id}" value="${cat_name}" class="form-control" />`;
+
+        // Replace buttons with save and cancel
+        row.children[2].innerHTML = `
+            <button class="btn btn-success btn-sm" onclick="saveCategory(${cat_id})">Save</button>
+            <button class="btn btn-secondary btn-sm" onclick="cancelEdit(${cat_id}, '${cat_name}')">Cancel</button>
+        `;
+    };
+
+    // Save Edited Category
+    window.saveCategory = function (cat_id) {
+        const newName = document.getElementById(`editInput-${cat_id}`).value.trim();
+
+        if (newName === "") {
+            Swal.fire({
+                icon: "error",
+                title: "Empty Field",
+                text: "Category name cannot be empty!",
+            });
+            return;
+        }
+
         let formData = new FormData();
-        formData.append("cat_name", cat_name);
+        formData.append("cat_id", cat_id);
+        formData.append("cat_name", newName);
 
         fetch("../actions/update_category_action.php", {
             method: "POST",
@@ -77,9 +103,25 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(res => res.json())
         .then(resp => {
-            alert(resp.message);
+            Swal.fire({
+                icon: resp.status === "success" ? "success" : "error",
+                title: resp.status === "success" ? "Updated!" : "Error",
+                text: resp.message,
+            });
             loadCategories();
         });
+    };
+
+    // Cancel Edit
+    window.cancelEdit = function (cat_id, oldName) {
+        const nameCell = document.getElementById(`catName-${cat_id}`);
+        const row = document.getElementById(`row-${cat_id}`);
+
+        nameCell.textContent = oldName;
+        row.children[2].innerHTML = `
+            <button class="btn btn-sm btn-primary" onclick="editCategory(${cat_id}, '${oldName}')">Edit</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCategory(${cat_id})">Delete</button>
+        `;
     };
 
     // Delete category
@@ -98,14 +140,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     };
 
-    //form interactivity
-    
-
-    window.openForm = function () {
-        document.getElementById("updateCatForm").style.display = "block";
-    };
-
-    window.closeForm = function () {
-        document.getElementById("updateCatForm").style.display = "none";
-    };
 });    

@@ -6,7 +6,6 @@ require_once '../settings/db_class.php';
 $user_id = getUserID();
 $role = getUserRole();
 
-
 $db = new db_connection();
 
 ?>
@@ -21,146 +20,7 @@ $db = new db_connection();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
-    <style>
-        .small{
-            width: 30px;
-        }
-
-        .btn-custom {
-            background-color: #D19C97;
-            border-color: #D19C97;
-            color: #fff;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        .btn-custom:hover {
-            background-color: #b77a7a;
-            border-color: #b77a7a;
-        }
-
-        .highlight {
-            color: #D19C97;
-            transition: color 0.3s;
-        }
-
-        .highlight:hover {
-            color: #b77a7a;
-        }
-
-        body {
-            /* Base background color */
-            background-color: #f8f9fa;
-
-            /* Gradient-like grid using repeating-linear-gradients */
-            background-image:
-                repeating-linear-gradient(0deg,
-                    #b77a7a,
-                    #b77a7a 1px,
-                    transparent 1px,
-                    transparent 20px),
-                repeating-linear-gradient(90deg,
-                    #b77a7a,
-                    #b77a7a 1px,
-                    transparent 1px,
-                    transparent 20px),
-                linear-gradient(rgba(183, 122, 122, 0.1),
-                    rgba(183, 122, 122, 0.1));
-
-            /* Blend the gradients for a subtle overlay effect */
-            background-blend-mode: overlay;
-
-            /* Define the size of the grid */
-            background-size: 20px 20px;
-
-            /* Ensure the background covers the entire viewport */
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .header-container {
-            margin-top: 100px;
-        }
-
-        .card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: #D19C97;
-            color: #fff;
-        }
-
-        .animate-pulse-custom {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Additional Styling for Enhanced Appearance */
-        .form-label i {
-            margin-left: 5px;
-            color: #b77a7a;
-        }
-
-        .alert-info {
-            animation: fadeIn 1s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .form-popup {
-            display: none; 
-            position: fixed;
-            z-index: 1000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4); 
-            padding-top: 50px; 
-            justify-content: center;
-            align-items: center;
-        }
-
-        .menu-tray {
-			position: fixed;
-			top: 16px;
-			right: 16px;
-			background: rgba(255,255,255,0.95);
-			border: 1px solid #e6e6e6;
-			border-radius: 8px;
-			padding: 6px 10px;
-			box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-			z-index: 1000;
-		}
-		.menu-tray a { margin-left: 8px; }
-    </style>
+    <link rel="stylesheet" href="../settings/styles.css">
 </head>
 
 <body>
@@ -191,7 +51,7 @@ $db = new db_connection();
                     </div>
 
                     <div class="card-body">
-                        <form method="POST" action="" class="mt-4" id="addCatForm">
+                        <form method="POST" action="" class="mt-4" id="addBrandForm">
                             <div class="mb-3">
                                 <label for="brandName" class="form-label">Brand Name</label>
                                 <input type="text" class="form-control animate__animated animate__fadeInUp" id="brand_name" name="brand_name" required>
@@ -204,7 +64,7 @@ $db = new db_connection();
                 </div>
             </div>
 
-            <!-- View Categories-->
+            <!-- View Brands-->
             <div class="col-md-6">
                 <div class="card animate__animated animate__zoomIn">
                     <div class="card-header text-center highlight">
@@ -229,12 +89,12 @@ $db = new db_connection();
                                         <!-- Update Brand Popup -->
                                             <div id="updatePopup" class="form-popup">
                                                 <div class="card mx-auto p-4" style="max-width: 400px; background-color: #fff; border-radius: 10px;">
-                                                    <h5 class="text-center mb-3 highlight">Update Category</h5>
+                                                    <h5 class="text-center mb-3 highlight">Update Brand</h5>
                                                     <form id="updateForm">
                                                         <div class="mb-3">
-                                                            <label for="update_cat_name" class="form-label">New Category Name</label>
-                                                            <input type="text" class="form-control" id="update_cat_name" required>
-                                                            <input type="hidden" id="update_cat_id">
+                                                            <label for="update_brand_name" class="form-label">New Brand Name</label>
+                                                            <input type="text" class="form-control" id="update_brand_name" required>
+                                                            <input type="hidden" id="update_brand_id">
                                                         </div>
                                                         <div class="d-flex justify-content-between">
                                                             <button type="submit" id="saveUpdate" class="btn btn-custom">Save</button>
@@ -259,7 +119,7 @@ $db = new db_connection();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/category.js"></script>
+    <script src="../js/brand.js"></script>
 
     
 </body>

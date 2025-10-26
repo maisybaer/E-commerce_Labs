@@ -53,6 +53,18 @@ class Customer extends db_connection
 
         }
 
+    //function to get customer name
+    private function getUserName($user_id)
+    {
+
+        $stmt = $this->db->prepare("SELECT customer_name FROM customer WHERE customer_id = ?");
+        $stmt->bind_param("s", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return $result;
+
+        }
+
     //function to get customer via id
     public function getUserId()
     {

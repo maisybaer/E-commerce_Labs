@@ -23,6 +23,11 @@ function getUserID() {
     return $_SESSION['user_id'] ?? null;  
 }
 
+//function to get username
+function getUserName($user_id) {
+    return $_SESSION['customer_name'] ?? null;  
+}
+
 //function to check for role (admin, customer, etc)
 function getUserRole() {
     return $_SESSION['role'] ?? null;     

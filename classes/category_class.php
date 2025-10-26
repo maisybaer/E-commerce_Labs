@@ -47,5 +47,15 @@ class Category extends db_connection
         }
 
 
+    //function to get all categories
+    public function getAllCat()
+    {
+        $stmt = $this->db->prepare("SELECT * FROM categories");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+
+        }
+
 
 }

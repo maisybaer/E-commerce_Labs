@@ -23,9 +23,16 @@ function delete_cat_ctr($cat_id)
     return $cat->deleteCat($cat_id);
 }
 
-//get category controller
+//get category controller by user id
 function get_cat_ctr($user_id)
 {
     $cat = new Category();
     return $cat->getCat($user_id);
+}
+
+//get all categories controller
+function get_all_cat_ctr()
+{
+    $cat = new Category();
+    return $cat->getAllCat();
 }

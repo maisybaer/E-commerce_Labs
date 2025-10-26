@@ -3,6 +3,12 @@ require_once '../controllers/category_controller.php';
 require_once '../settings/core.php';
 
 $user_id = getUserID();
-$cat = get_cat_ctr($user_id);
 
+//fetch category based on user id
+$cat = get_cat_ctr($user_id);
 echo json_encode($cat);
+
+//fetch all categories
+$cat = get_all_cat_ctr();
+
+?>

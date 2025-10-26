@@ -9,7 +9,9 @@ if (!isset($_SESSION['user_id'])) {
 
 // get user info
 $user_id = getUserID();
+$user_name= getUserName($user_id);
 $role = getUserRole();
+echo $user_name
 ?>
 
 <!DOCTYPE html>
@@ -52,251 +54,17 @@ $role = getUserRole();
 		<div class="text-center">
 
             <?php if ($role == 1) : ?>  
-				<h1>Welcome Admin!</h1>
+				<h1>Welcome, <?php echo htmlspecialchars($user_name); ?></h1>
                 <a href="admin/category.php" class="btn btn-sm btn-outline-primary">Categories</a>
-				<a href="admin/category.php" class="btn btn-sm btn-outline-primary">Products</a>
-				<a href="admin/category.php" class="btn btn-sm btn-outline-primary">Customers</a>
-				<a href="admin/category.php" class="btn btn-sm btn-outline-primary">Orders</a>
+				<a href="admin/product.php" class="btn btn-sm btn-outline-primary">Products</a>
+				<a href="admin/customers.php" class="btn btn-sm btn-outline-primary">Customers</a>
+				<a href="admin/orders.php" class="btn btn-sm btn-outline-primary">Orders</a>
+				<a href="admin/brand.php" class="btn btn-sm btn-outline-primary">Brands</a>
             <?php elseif ($role == 2) : ?> 
-				<h1>Welcome Customer!</h1>'
-				;;?Location
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				 '
+				<h1>Welcome <?php echo $user_name ?>!</h1>'
+	
 			<?php endif; ?>
 
-		
-			
 			<?php if (isset($_SESSION['user_id'])): ?>
 				<p class="text-muted">Use the menu in the top-right to Logout.</p>			
 			<?php else: ?>

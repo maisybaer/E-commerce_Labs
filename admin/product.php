@@ -23,7 +23,7 @@ $allCat=get_all_cat_ctr();
 
 <head>
     <meta charset="UTF-8">
-    <title>Products-Taste of Africa</title>
+    <title>Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
@@ -50,7 +50,7 @@ $allCat=get_all_cat_ctr();
             <h1>Products</h1>
             <h4>All the products you have created are listed below</h4>
         
-            <!-- Create brand form-->
+            <!-- Add product form-->
             <div class="col-md-6">
                 <div class="card animate__animated animate__zoomIn">
                     <div class="card-header text-center highlight">
@@ -60,8 +60,10 @@ $allCat=get_all_cat_ctr();
                     <div class="card-body">
                         <form method="POST" action="" class="mt-4" id="addProductForm">
                             <div class="mb-3">
-                                <label for="productCategory" class="form-label">Category</label>
-                                <select class="form-control" id="product_cat" name="product_cat" required>
+                                <input type="hidden" id="user_id" name="user_id" value="<?php echo $_SESSION['user_id'] ?? ''; ?>">
+
+                                <label for="productCat" class="form-label">Category</label>
+                                <select class="form-control" id="productCat" name="productCat" required>
                                     <option value="">Select Category</option>
                                     <?php foreach ($allCat as $cat): ?>
                                         <option value="<?php echo htmlspecialchars($cat['cat_id']); ?>">
@@ -71,7 +73,7 @@ $allCat=get_all_cat_ctr();
                                 </select>
 
                                 <label for="productBrand" class="form-label">Brand</label>
-                                <select class="form-control" id="product_brand" name="product_brand" required>
+                                <select class="form-control" id="productBrand" name="productBrand" required>
                                     <option value="">Select Brand</option>
                                     <?php foreach ($allBrand as $brand): ?>
                                         <option value="<?php echo htmlspecialchars($brand['brand_id']); ?>">
@@ -81,19 +83,19 @@ $allCat=get_all_cat_ctr();
                                 </select>
 
                                 <label for="productTitle" class="form-label">Product Title</label>
-                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="product_title" name="product_title" required>
+                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="productTitle" name="productTitle" required>
 
                                 <label for="productPrice" class="form-label">Product Price</label>
-                                <input type="number" step="0.01" class="form-control animate__animated animate__fadeInUp" id="product_price" name="product_price" required>
+                                <input type="number" class="form-control animate__animated animate__fadeInUp" id="productPrice" name="productPrice" required>
 
-                                <label for="productDescription" class="form-label">Product Description</label>
-                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="product_description" name="product_description" required>
+                                <label for="productDes" class="form-label">Product Description</label>
+                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="productDes" name="productDes" required>
 
                                 <label for="productImage" class="form-label">Product Image</label>
-                                <input type="file" class="form-control animate__animated animate__fadeInUp" id="product_image" name="product_image">
+                                <input type="file" class="form-control animate__animated animate__fadeInUp" id="productImage" name="productImage">
 
-                                <label for="productKeyword" class="form-label">Product Keyword</label>
-                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="product_keyword" name="product_keyword" required>
+                                <label for="productKey" class="form-label">Product Keyword</label>
+                                <input type="text" class="form-control animate__animated animate__fadeInUp" id="productKey" name="productKey" required>
                             </div>
 
                             <button type="submit" class="btn btn-custom w-100 animate-pulse-custom">Add New Product</button>
@@ -138,9 +140,12 @@ $allCat=get_all_cat_ctr();
                                                     <form id="updateForm">
                                                         <div class="mb-3">
                                                             
+                                                            <input type="hidden" id="updateProductID">
+
                                                             <!-- Update Product Category -->
-                                                            <label for="update_product_cat" class="form-label">New Product Category</label>
-                                                            <select class="form-control" id="update_product_cat" name="update_product_cat" type="hidden" id="update_product_id" required>
+
+                                                            <label for="updateProductCat" class="form-label">New Product Category</label>
+                                                            <select class="form-control" id="updateProductCat" name="updateProductCat" required>
                                                                 <option value="">Select Category</option>
                                                                 <?php foreach ($allCat as $cat): ?>
                                                                     <option value="<?php echo htmlspecialchars($cat['cat_id']); ?>">
@@ -150,34 +155,35 @@ $allCat=get_all_cat_ctr();
                                                             </select>
 
                                                             <!-- Update Product Brand -->
-                                                            <label for="update_product_brand" class="form-label">New Product Brand</label>
-                                                            <input type="dropdown" class="form-control" id="update_product_brand" value=brand_id, display=brand_name required>
-                                                            <input type="hidden" id="update_product_id">
-
+                                                            <label for="updateProductBrand" class="form-label" >New Product Brand</label>
+                                                            <select class="form-control" id="updateProductBrand" name="updateProductBrand" required>
+                                                                <option value="">Select Brand</option>
+                                                                <?php foreach ($allBrand as $brand): ?>
+                                                                    <option value="<?php echo htmlspecialchars($brand['brand_id']); ?>">
+                                                                    <?php echo htmlspecialchars($brand['brand_name']); ?>
+                                                                    </option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                    
                                                             <!-- Update Product Title -->
-                                                            <label for="update_product_title" class="form-label">New Product Title</label>
-                                                            <input type="text" class="form-control" id="update_product_title" required>
-                                                            <input type="hidden" id="update_product_id">
+                                                            <label for="updateProductTitle" class="form-label">New Product Title</label>
+                                                            <input type="text" class="form-control" id="updateProductTitle" name="updateProductTitle" required>
 
                                                             <!-- Update Product Price -->
-                                                            <label for="update_product_price" class="form-label">New Product Price</label>
-                                                            <input type="number" step="0.01" class="form-control" id="update_product_price" required>
-                                                            <input type="hidden" id="update_product_id">
+                                                            <label for="updateProductPrice" class="form-label">New Product Price</label>
+                                                            <input type="number" class="form-control" id="updateProductPrice" name="updateProductPrice" required>
 
                                                             <!-- Update Product Description -->
-                                                            <label for="update_product_desc" class="form-label">New Product Description</label>
-                                                            <input type="text" class="form-control" id="update_product_desc" required>
-                                                            <input type="hidden" id="update_product_id"></div>
+                                                            <label for="updateProductDes" class="form-label">New Product Description</label>
+                                                            <input type="text" class="form-control" id="updateProductDes" name="updateProductDesc" required>
 
                                                             <!-- Update Product Image -->
-                                                            <label for="update_product_image" class="form-label">New Product Image</label>
-                                                            <input type="file" class="form-control" id="update_product_image">
-                                                            <input type="hidden" id="update_product_id">
+                                                            <label for="updateProductImage" class="form-label">New Product Image</label>
+                                                            <input type="file" class="form-control" id="updateProductImage" name="updateProductImage">
 
                                                             <!-- Update Product Keywords -->
-                                                            <label for="update_product_keywords" class="form-label">New Product Keywords</label>
-                                                            <input type="text" class="form-control" id="update_product_keywords" required>
-                                                            <input type="hidden" id="update_product_id"></div>
+                                                            <label for="updateProductKey" class="form-label">New Product Keywords</label>
+                                                            <input type="text" class="form-control" id="updateProductKey" name="updateProductKey" required>
 
                                                         </div>
                                                         <div class="d-flex justify-content-between">

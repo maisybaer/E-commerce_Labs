@@ -1,5 +1,6 @@
 <?php
 //session_start();
+
 require_once '../settings/core.php';
 require_once '../settings/db_class.php';
 require_once '../actions/fetch_category_action.php';
@@ -132,7 +133,6 @@ $allCat=get_all_cat_ctr();
                                     <td colspan="9" class="text-center">No product available</td>
                                 <tr>
                             
-                                    <button onclick="openForm()" class="small btn btn-custom w-100 animate-pulse-custom">Edit</button>
                                         <!-- Update Product Popup -->
                                             <div id="updatePopup" class="form-popup">
                                                 <div class="card mx-auto p-4" style="max-width: 400px; background-color: #fff; border-radius: 10px;">
@@ -187,14 +187,13 @@ $allCat=get_all_cat_ctr();
 
                                                         </div>
                                                         <div class="d-flex justify-content-between">
-                                                            <button type="submit" id="saveUpdate" class="btn btn-custom">Save</button>
-                                                            <button type="button" id="cancelUpdate" class="btn btn-secondary">Cancel</button>
+                                                           <button type="submit" id="saveUpdate" class="btn btn-custom">Save</button>
+                                                           <button type="button" id="cancelUpdate" class="btn btn-secondary">Cancel</button>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
 
-                                    <button class="small btn btn-custom w-100 animate-pulse-custom">Delete</button>
                                 </td>
                             </tbody>
 

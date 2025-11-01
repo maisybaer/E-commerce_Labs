@@ -86,14 +86,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update Product (Pop up form)
     let currentUpdateProductId = null;
 
-    function createUpdatePopup() {
-        if (document.getElementById("updateProductForm")) return;
-        let popup = document.createElement("div");
-        popup.className = "form-popup";
-        popup.id = "updateProductForm";
-        popup.style.display = "none";
+function createUpdatePopup() {
+    if (document.getElementById("updatePopupContainer")) return;
+
+    const popup = document.createElement("div");
+    popup.className = "form-popup";
+    popup.id = "updatePopupContainer";
+    popup.style.display = "none";
+
         popup.innerHTML = `
-            <div class="card" style="max-width:400px;margin:auto;">
+            <div class="card" style="max-width:auto;margin:auto;">
                 <div class="card-body">
                     <form id="updateProductForm">
                         <div class="mb-3">
@@ -196,17 +198,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openForm(product_id) {
         currentEditProductId = product_id;
-        const popup = document.getElementById("editProductForm");
+        populateDropdowns(productCat, productBrand);
+
         document.getElementById("updateProductTitle").value = productTitle;
         document.getElementById("updateProductprice").value = productPrice;
         document.getElementById("updateProductDesc").value = productDes;
         document.getElementById("updateProductKey").value = productKey;
-        populateDropdowns(productCat, productBrand);
         popup.style.display = "block";
     }
 
     function closeForm() {
-        let popup = document.getElementById("updateProductForm");
+        let popup = document.getElementById("updatePopupContainer");
         popup.style.display = "none";
     }
 
@@ -224,13 +226,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         let row = `
                         <tr>
                             <td>${product.product_id}</td>
-                            <td>${product.productCat}</td>
-                            <td>${product.productBrand}</td>
-                            <td>${product.productTitle}</td>
-                            <td>${product.productPrice}</td>
-                            <td>${product.productDes}</td>
-                            <td><img src="../images/product/${product.productImage}" width="50"></td>
-                            <td>${product.productKey}</td>
+                            <td>${product.product_cat}</td>
+                            <td>${product.product_brand}</td>
+                            <td>${product.product_title}</td>
+                            <td>${product.product_price}</td>
+                            <td>${product.product_desc}</td>
+                            <td><img src="../images/product/${product.product_image}" width="50"></td>
+                            <td>${product.product_keywords}</td>
                             <td>
                                 <button class="btn btn-sm btn-custom" onclick='openForm(${JSON.stringify(product)})'>Edit</button>
                                 <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.product_id})">Delete</button>

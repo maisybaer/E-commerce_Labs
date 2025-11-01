@@ -13,7 +13,8 @@ function add_product_ctr($productCat, $productBrand, $productTitle, $productDes,
 function update_product_ctr($productCat, $productBrand, $productTitle, $productDes, $productKey, $productImage, $productPrice,$product_id)
 {
     $product = new Product();
-    return $product->updateProduct($productCat, $productBrand, $productTitle, $productDes, $productKey, $productImage, $productPrice, $product_id);
+    // Product::updateProduct expects ($product_id, $productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey)
+    return $product->updateProduct($product_id, $productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey);
 }
 
 //delete product controller

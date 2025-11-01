@@ -30,3 +30,28 @@ function get_product_ctr($user_id)
     $product = new Product();
     return $product->getProduct($user_id);
 }
+
+//view all products controller
+function view_all_product_ctr(){
+    $product = new Product();
+    return $product->viewAllProduct();
+}
+
+//filter by category controller
+function filter_by_cat_ctr($cat_id){
+    $product = new Product();
+    return $product->filterByCat($cat_id);
+}   
+
+//filter by brand controller
+function filter_by_brand_ctr($brand_id){    
+    $product = new Product();
+    return $product->filterByBrand($brand_id);
+}
+
+//view single product controller 
+function view_single_product_ctr($product_id){
+    $product = new Product();
+    return $product->viewSingleProduct($product_id);
+}
+

@@ -37,33 +37,105 @@ class Product extends db_connection
     }
 
     //function to get product based on user ID
- public function getProduct($user_id)
-{
-    // Return product rows including both the category/brand names and their IDs
-    $stmt = $this->db->prepare("SELECT 
-        p.product_id,
-        p.product_cat,
-        p.product_brand,
-        c.cat_name AS category,
-        b.brand_name AS brand,
-        p.product_title,
-        p.product_price,
-        p.product_desc,
-        p.product_image,
-        p.product_keywords,
-        p.added_by
-    FROM products p
-    JOIN categories c ON p.product_cat = c.cat_id
-    JOIN brands b ON p.product_brand = b.brand_id
-    WHERE p.added_by = ?");
+    public function getProduct($user_id)
+    {
+        // Return product rows including both the category/brand names and their IDs
+        $stmt = $this->db->prepare("SELECT 
+            p.product_id,  p.product_cat,  p.product_brand,
+            c.cat_name AS category, b.brand_name AS brand,
+            p.product_title,  p.product_price, p.product_desc, p.product_image, p.product_keywords, p.added_by
+        FROM products p
+        JOIN categories c ON p.product_cat = c.cat_id
+        JOIN brands b ON p.product_brand = b.brand_id
+        WHERE p.added_by = ?");
 
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);
-}
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    //view all products function
+    public function viewAllProduct(){
+        $stmt = $this->db->prepare("SELECT 
+            p.product_id,  p.product_cat,  p.product_brand,
+            c.cat_name AS category, b.brand_name AS brand,
+            p.product_title,  p.product_price, p.product_desc, p.product_image, p.product_keywords, p.added_by
+        FROM products p
+        JOIN categories c ON p.product_cat = c.cat_id
+        JOIN brands b ON p.product_brand = b.brand_id");
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    //search products function
+    public function search($query){
+        $like = "%{$query}%";
+        $stmt = $this->db->prepare("SELECT 
+            p.product_id,  p.product_cat,  p.product_brand,
+            c.cat_name AS category, b.brand_name AS brand,
+            p.product_title,  p.product_price, p.product_desc, p.product_image, p.product_keywords, p.added_by
+        FROM products p
+        JOIN categories c ON p.product_cat = c.cat_id
+        JOIN brands b ON p.product_brand = b.brand_id");
+
+        $stmt->bind_param("s", $like);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC); 
+    }
 
 
+    //filter products function by category function
+    public function filterByCat($cat_id){
+        $stmt = $this->db->prepare("SELECT 
+            p.product_id,  p.product_cat,  p.product_brand,
+            c.cat_name AS category, b.brand_name AS brand,
+            p.product_title,  p.product_price, p.product_desc, p.product_image, p.product_keywords, p.added_by
+        FROM products p
+        JOIN categories c ON p.product_cat = c.cat_id
+        JOIN brands b ON p.product_brand = b.brand_id
+        WHERE p.product_cat = ?");
 
+        $stmt->bind_param("i", $cat_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC); 
+    }
 
+    //filter products function by brand function
+    public function filterByBrand($brand_id){
+        $stmt = $this->db->prepare("SELECT 
+            p.product_id,  p.product_cat,  p.product_brand,
+            c.cat_name AS category, b.brand_name AS brand,
+            p.product_title,  p.product_price, p.product_desc, p.product_image, p.product_keywords, p.added_by
+        FROM products p
+        JOIN categories c ON p.product_cat = c.cat_id
+        JOIN brands b ON p.product_brand = b.brand_id
+        WHERE p.product_brand = ?");
+
+        $stmt->bind_param("i", $brand_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC); 
+    }
+
+    //view single product function
+    public function viewSingleProduct($product_id){
+        $stmt = $this->db->prepare("SELECT 
+            p.product_id,  p.product_cat,  p.product_brand,
+            c.cat_name AS category, b.brand_name AS brand,
+            p.product_title,  p.product_price, p.product_desc, p.product_image, p.product_keywords, p.added_by
+        FROM products p
+        JOIN categories c ON p.product_cat = c.cat_id
+        JOIN brands b ON p.product_brand = b.brand_id
+        WHERE p.product_id = ?");
+
+        $stmt->bind_param("i", $product_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
 }

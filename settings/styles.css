@@ -1,272 +1,116 @@
         
-        .btn-custom {
-            background-color: #D19C97;
-            border-color: #D19C97;
-            color: #fff;
-            transition: background-color 0.3s, border-color 0.3s;
+        /* ==================================================
+           Theme variables
+           ================================================== */
+        :root{
+            --brand: #D19C97;      /* soft rosy */
+            --brand-dark: #b77a7a; /* hover */
+            --bg: #f8f9fa;        /* page background */
+            --muted: #6c757d;
+            --card-shadow: 0 6px 18px rgba(35, 35, 35, 0.07);
+            --radius: 12px;
+            --max-width: 1200px;
+            --container-padding: 20px;
         }
 
-        .btn-custom:hover {
-            background-color: #b77a7a;
-            border-color: #b77a7a;
+        /* ==================================================
+           Global base
+           ================================================== */
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            background-color:var(--bg);
+            color:#222;
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
         }
 
-        .highlight {
-            color: #D19C97;
-            transition: color 0.3s;
-        }
+        main{max-width:var(--max-width);margin:0 auto;padding:var(--container-padding)}
 
-        .highlight:hover {
-            color: #b77a7a;
-        }
-
-        body {
-            /* Base background color */
-            background-color: #f8f9fa;
-
-            /* Gradient-like grid using repeating-linear-gradients */
+        /* subtle patterned background (kept but toned down) */
+        body::before{
+            content: '';
+            position: fixed; inset:0; z-index:-1; pointer-events:none;
             background-image:
-                repeating-linear-gradient(0deg,
-                    #b77a7a,
-                    #b77a7a 1px,
-                    transparent 1px,
-                    transparent 20px),
-                repeating-linear-gradient(90deg,
-                    #b77a7a,
-                    #b77a7a 1px,
-                    transparent 1px,
-                    transparent 20px),
-                linear-gradient(rgba(183, 122, 122, 0.1),
-                    rgba(183, 122, 122, 0.1));
-
-            /* Blend the gradients for a subtle overlay effect */
-            background-blend-mode: overlay;
-
-            /* Define the size of the grid */
-            background-size: 20px 20px;
-
-            /* Ensure the background covers the entire viewport */
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
+                repeating-linear-gradient(0deg, var(--brand-dark), var(--brand-dark) 1px, transparent 1px, transparent 28px),
+                repeating-linear-gradient(90deg, var(--brand-dark), var(--brand-dark) 1px, transparent 1px, transparent 28px);
+            opacity:0.05;
         }
 
-        .login-container {
-            margin-top: 100px;
+        /* ==================================================
+           Buttons & utility
+           ================================================== */
+        .btn-custom{
+            background:var(--brand);
+            border-color:var(--brand);
+            color:#fff;
+            padding:.45rem .75rem;
+            border-radius:8px;
+            transition:all .18s ease;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+        }
+        .btn-custom:hover{background:var(--brand-dark);border-color:var(--brand-dark)}
+        .btn{border-radius:8px}
+
+        .highlight{color:var(--brand);transition:color .18s}
+        .highlight:hover{color:var(--brand-dark)}
+
+        .text-muted{color:var(--muted)!important}
+
+        /* form inputs */
+        input[type="text"], select, textarea{border:1px solid #e6e6e6;padding:.5rem .65rem;border-radius:8px}
+        input:focus, select:focus, textarea:focus{outline:none;box-shadow:0 6px 18px rgba(183,122,122,0.08);border-color:var(--brand)}
+
+        /* ==================================================
+           Cards and layout
+           ================================================== */
+        .card{border:none;border-radius:var(--radius);overflow:hidden;box-shadow:var(--card-shadow);background:#fff}
+        .card-header{background:var(--brand);color:#fff;padding:.75rem 1rem}
+
+        .product-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+        .product-card{width:220px;border-radius:10px;background:#fff;padding:12px;border:1px solid #eee;box-shadow:0 6px 18px rgba(0,0,0,0.04);transition:transform .18s, box-shadow .18s}
+        .product-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.08)}
+        .product-card img{width:100%;height:150px;object-fit:cover;border-radius:6px}
+        .product-card h5{font-size:1rem;margin:.5rem 0 .25rem}
+        .product-card p{margin:.25rem 0}
+
+        .menu-tray{position:fixed;top:16px;right:16px;background:rgba(255,255,255,0.95);border:1px solid #e9e9e9;border-radius:10px;padding:6px 10px;box-shadow:0 6px 18px rgba(0,0,0,0.06);z-index:1200}
+        .menu-tray a{margin-left:8px;color:var(--muted);text-decoration:none}
+
+        /* popup form */
+        .form-popup{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;padding:24px}
+        .form-popup .card{max-width:680px;width:100%}
+
+        /* form check styling (radio/checkbox visuals) */
+        .form-check-label{position:relative;padding-left:2rem;cursor:pointer}
+        .form-check-label::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:1rem;height:1rem;border:2px solid var(--brand);border-radius:50%;background:#fff}
+        .custom-radio .form-check-input:checked + .form-check-label::before{background:var(--brand)}
+
+        /* small helpers */
+        .muted{color:var(--muted)}
+        .center{text-align:center}
+
+        /* responsive tweaks */
+        @media (max-width:768px){
+            .product-card{width:48%}
+        }
+        @media (max-width:480px){
+            .product-card{width:100%}
+            .menu-tray{right:8px;left:8px}
         }
 
-        .card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+        /* subtle animations */
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .fade-in{animation:fadeIn .35s ease}
 
-        .card-header {
-            background-color: #D19C97;
-            color: #fff;
-        }
+        /* alerts */
+        .alert-info{animation:fadeIn .85s ease}
 
-        .animate-pulse-custom {
-            animation: pulse 2s infinite;
-        }
+        /* keep legacy class names referenced elsewhere */
+        .register-container{margin-top:50px}
+        .login-container{margin-top:100px}
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Additional Styling for Enhanced Appearance */
-        .form-label i {
-            margin-left: 5px;
-            color: #b77a7a;
-        }
-
-        .alert-info {
-            animation: fadeIn 1s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-              .btn-custom {
-            background-color: #D19C97;
-            border-color: #D19C97;
-            color: #fff;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        .btn-custom:hover {
-            background-color: #b77a7a;
-            border-color: #b77a7a;
-        }
-
-        .highlight {
-            color: #D19C97;
-            transition: color 0.3s;
-        }
-
-        .highlight:hover {
-            color: #b77a7a;
-        }
-
-        body {
-            /* Base background color */
-            background-color: #f8f9fa;
-
-            /* Gradient-like grid using repeating-linear-gradients */
-            background-image:
-                repeating-linear-gradient(0deg,
-                    #b77a7a,
-                    #b77a7a 1px,
-                    transparent 1px,
-                    transparent 20px),
-                repeating-linear-gradient(90deg,
-                    #b77a7a,
-                    #b77a7a 1px,
-                    transparent 1px,
-                    transparent 20px),
-                linear-gradient(rgba(183, 122, 122, 0.1),
-                    rgba(183, 122, 122, 0.1));
-
-            /* Blend the gradients for a subtle overlay effect */
-            background-blend-mode: overlay;
-
-            /* Define the size of the grid */
-            background-size: 20px 20px;
-
-            /* Ensure the background covers the entire viewport */
-            min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        .register-container {
-            margin-top: 50px;
-        }
-
-        .card {
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            background-color: #D19C97;
-            color: #fff;
-        }
-
-        .custom-radio .form-check-input:checked+.form-check-label::before {
-            background-color: #D19C97;
-            border-color: #D19C97;
-        }
-
-        .form-check-label {
-            position: relative;
-            padding-left: 2rem;
-            cursor: pointer;
-        }
-
-        .form-check-label::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid #D19C97;
-            border-radius: 50%;
-            background-color: #fff;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        .form-check-input:focus+.form-check-label::before {
-            box-shadow: 0 0 0 0.2rem rgba(209, 156, 151, 0.5);
-        }
-
-        .animate-pulse-custom {
-            animation: pulse 2s infinite;
-        }
-
-                @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Additional Styling for Enhanced Appearance */
-        .form-label i {
-            margin-left: 5px;
-            color: #b77a7a;
-        }
-
-        .alert-info {
-            animation: fadeIn 1s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .form-popup {
-            display: none; 
-            position: fixed;
-            z-index: 1000; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4); 
-            padding-top: 50px; 
-            justify-content: center;
-            align-items: center;
-        }
-
-        .menu-tray {
-			position: fixed;
-			top: 16px;
-			right: 16px;
-			background: rgba(255,255,255,0.95);
-			border: 1px solid #e6e6e6;
-			border-radius: 8px;
-			padding: 6px 10px;
-			box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-			z-index: 1000;
-		}
-		.menu-tray a { margin-left: 8px; }
+        /* end of stylesheet */
         

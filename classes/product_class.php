@@ -55,6 +55,7 @@ class Product extends db_connection
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+
     //view all products function
     public function viewAllProduct(){
         $stmt = $this->db->prepare("SELECT 

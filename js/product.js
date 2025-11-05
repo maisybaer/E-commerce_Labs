@@ -319,87 +319,72 @@ function populateDropdowns(selectedCat, selectedBrand) {
     ////-------------------------------------
     //ALL JS FOR ALL PRODUCTS PAGE
     //-------------------------------------
-$(document).ready(function () {
 
-    // Load all products
-function loadProducts(url) {
-  console.log("Fetching products from:", url);
-  $.getJSON(url)
-    .done(function(data) {
-      let output = '';
-      if (!data || data.length === 0) {
-        output = '<p>No products found.</p>';
-      } else {
-        data.forEach(p => {
-          output += `
-            <div class="product-card">
-              <img src="../${p.product_image || 'images/no-image.png'}" alt="${p.product_title}">
-              <h3>${p.product_title}</h3>
-              <p>Price: $${p.product_price}</p>
-              <p>Category: ${p.category}</p>
-              <p>Brand: ${p.brand}</p>
-              <a href="single_product.php?product_id=${p.product_id}">View Details</a>
-            </div>`;
-        });
-      }
-      $("#productList").html(output);
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      console.error("Error loading products:", textStatus, errorThrown);
-      console.log("Response text:", jqXHR.responseText);
-      $("#productList").html('<p>Error loading products.</p>');
-    });
-}
+    // Function to load all products
+document.addEventListener("DOMContentLoaded", () => {
+    const tableBody = document.querySelector("#productTable tbody");
 
+    function loadAllProducts() {
+        fetch("../actions/fetch_product_action.php")
+            .then(async response => {
+                // Log and check raw response text
+                const text = await response.text();
+                console.log("Raw response:", text);
 
-    // Default: load all
-    loadProducts("../actions/product_actions.php?action=view_all");
+                if (!response.ok) {
+                    throw new Error(`HTTP error ${response.status}`);
+                }
 
-    // Search
-    $("#searchBtn").on("click", function () {
-        const query = $("#searchBox").val();
-        if (query) {
-            loadProducts(`../actions/product_actions.php?action=search&query=${query}`);
-        } else {
-            loadProducts("../actions/product_actions.php?action=view_all");
-        }
-    });
+                // Try parsing JSON
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.error("Response was not valid JSON:", text);
+                    throw e;
+                }
+            })
+            .then(data => {
+                tableBody.innerHTML = ""; // Clear old rows
 
-    // Populate filters dynamically
-    $.getJSON("../actions/product_actions.php?action=view_all")
-        .done(function (data) {
-            const cats = new Set();
-            const brands = new Set();
-            data.forEach(p => {
-                cats.add(p.category);
-                brands.add(p.brand);
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(product => {
+                        const row = document.createElement("tr");
+
+                        row.innerHTML = `
+                            <td>${product.product_id}</td>
+                            <td>${product.cat_name || "N/A"}</td>
+                            <td>${product.brand_name || "N/A"}</td>
+                            <td>${product.product_title}</td>
+                            <td>${product.product_desc}</td>
+                            <td><img src="${product.product_image}" alt="Image" width="60"></td>
+                            <td>${parseFloat(product.product_price).toFixed(2)}</td>
+                        `;
+
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No products found.</td>
+                        </tr>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching products:", error);
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-danger">Error loading products.</td>
+                    </tr>
+                `;
             });
-            cats.forEach(c => $("#categoryFilter").append(`<option value="${c}">${c}</option>`));
-            brands.forEach(b => $("#brandFilter").append(`<option value="${b}">${b}</option>`));
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error("Error fetching filter data:", textStatus, errorThrown);
-        });
+    }
 
-    // Filter by Category or Brand
-    $("#categoryFilter").change(function () {
-        const cat = $(this).val();
-        if (cat) {
-            loadProducts(`../actions/product_actions.php?action=filter_by_category&cat_id=${cat}`);
-        } else {
-            loadProducts("../actions/product_actions.php?action=view_all");
-        }
-    });
-
-    $("#brandFilter").change(function () {
-        const brand = $(this).val();
-        if (brand) {
-            loadProducts(`../actions/product_actions.php?action=filter_by_brand&brand_id=${brand}`);
-        } else {
-            loadProducts("../actions/product_actions.php?action=view_all");
-        }
-    });
+    // Load products on page load
+    loadAllProducts();
 });
+
+
 
     ////-------------------------------------
     //ALL JS FOR PRODUCT SEARCH PAGE

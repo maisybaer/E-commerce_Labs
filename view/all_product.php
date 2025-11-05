@@ -43,8 +43,9 @@ require_once '../settings/core.php';
 	<div class="menu-tray">
 		<?php if (isset($_SESSION['user_id'])): ?>
 			
-			<a href="index.php" class="btn btn-sm btn-outline-secondary">Home</a>
+			<a href="../index.php" class="btn btn-sm btn-outline-secondary">Home</a>
 			<a href="login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
+            <a href="view/basket.php" class="btn btn-sm btn-outline-secondary">Basket</a>
 
 		<?php else: ?>
 			<a href="login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
@@ -83,7 +84,7 @@ require_once '../settings/core.php';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/product.js"></script>
+    <script src="../js/all_products.js"></script>
     
 </body>
 </html>

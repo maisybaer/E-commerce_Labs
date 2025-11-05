@@ -1,40 +1,92 @@
 <?php
 require_once '../settings/core.php';
-$product_id = $_GET['product_id'] ?? null;
+require_once '../controllers/product_controller.php';
+
+$product_id = isset($_GET['product_id']) ? (int)$_GET['product_id'] : 0;
+$product = null;
+if ($product_id > 0) {
+    $product = view_single_product_ctr($product_id);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Product Details</title>
-    <link rel="stylesheet" href="../css/styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-    <div id="productDetails"></div>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../settings/styles.css">
+    
+    <style>
+        .product-image { max-width: 400px; }
+        .product-container { padding-top: 120px; }
+    
+    </style>
 
-    <script>
-    $(document).ready(function() {
-        const productId = "<?php echo $product_id; ?>";
-        if (productId) {
-            fetch(`../actions/product_actions.php?action=view_single&product_id=${productId}`)
-                .then(res => res.json())
-                .then(p => {
-                    $("#productDetails").html(`
-                        <h2>${p.product_title}</h2>
-                        <img src="../${p.product_image}" alt="${p.product_title}" width="300">
-                        <p><strong>Price:</strong> $${p.product_price}</p>
-                        <p><strong>Category:</strong> ${p.category}</p>
-                        <p><strong>Brand:</strong> ${p.brand}</p>
-                        <p><strong>Description:</strong> ${p.product_desc}</p>
-                        <p><strong>Keywords:</strong> ${p.product_keywords}</p>
-                        <button>Add to Cart</button>
-                    `);
-                });
-        } else {
-            $("#productDetails").html("<p>Invalid product.</p>");
-        }
-    });
-    </script>
+</head>
+
+<body>
+
+    <div class="menu-tray">
+        <?php if (isset($_SESSION['user_id'])): ?>
+           
+            <a href="../index.php" class="btn btn-sm btn-outline-secondary">Home</a>
+            <a href="login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
+            <a href="view/basket.php" class="btn btn-sm btn-outline-secondary">Basket</a>
+
+
+        <?php else: ?>
+            <a href="login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
+            <a href="login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
+        <?php endif; ?>        
+    </div>
+
+    <div class="container product-container">
+        <?php if (!$product): ?>
+            <div class="alert alert-warning">Product not found.</div>
+        <?php else: ?>
+            <div class="row">
+                <div class="col-md-6">
+                    <?php
+                        $img = $product['product_image'] ?? '';
+                        // normalize path
+                        if ($img && !preg_match('#^https?://#', $img)) {
+                            $img = preg_replace('#^\.?/+#', '', $img); // remove leading ./ or /
+                            $img = '../' . $img;
+                        }
+                    ?>
+                    <?php if ($img): ?>
+                        <img src="<?php echo htmlspecialchars($img); ?>" class="img-fluid product-image" alt="<?php echo htmlspecialchars($product['product_title']); ?>">
+                    <?php else: ?>
+                        <div class="product-image bg-light d-flex align-items-center justify-content-center">No image</div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="col-md-6">
+                    <h2><?php echo htmlspecialchars($product['product_title']); ?></h2>
+                    <p><strong>Product ID:</strong> <?php echo (int)$product['product_id']; ?></p>
+                    <p><strong>Category:</strong> <?php echo htmlspecialchars($product['category'] ?? $product['product_cat'] ?? ''); ?></p>
+                    <p><strong>Brand:</strong> <?php echo htmlspecialchars($product['brand'] ?? $product['product_brand'] ?? ''); ?></p>
+                    <p><strong>Price:</strong> $<?php echo htmlspecialchars($product['product_price']); ?></p>
+                    <p><strong>Description:</strong><br><?php echo nl2br(htmlspecialchars($product['product_desc'] ?? '')); ?></p>
+                    <p><strong>Keywords:</strong> <?php echo htmlspecialchars($product['product_keywords'] ?? ''); ?></p>
+
+                    <!-- Add to cart placeholder -->
+                    <form action="#" method="POST">
+                        <input type="hidden" name="product_id" value="<?php echo (int)$product['product_id']; ?>">
+                        <button class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/all_products.js"></script>
+
 </body>
 </html>

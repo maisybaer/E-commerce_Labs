@@ -2,8 +2,12 @@
 session_start();
 
 if (empty($_SESSION['user_id'])) {
-    header('Location: ../login/login.php');
+    header('Location: login/login.php');
     exit;
+}else{
+    $user_id=getUserID();
+    $user_name=getUserName($user_id);
+
 }
 
 //for header redirection
@@ -12,7 +16,7 @@ if (empty($_SESSION['user_id'])) {
 //funtion to check for login
 function checkLogin($email, $password) {
     if (!isset($_SESSION['user_id'])) {
-        header("Location: ../login/login.php");
+        header("Location: login/login.php");
         exit;
     }
 }

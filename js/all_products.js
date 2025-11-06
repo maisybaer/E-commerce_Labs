@@ -26,14 +26,25 @@ document.addEventListener('DOMContentLoaded', () => {
         slice.forEach(p => {
             const card = document.createElement('div');
             card.className = 'product-card';
-            const imgSrc = p.product_image ? (p.product_image.startsWith('http') ? p.product_image : ('../' + p.product_image.replace(/^\/+/, ''))) : '';
+            // Prefer server-provided normalized image_url (added by fetch_product_action.php)
+            let imgSrc = '';
+            if (p.image_url) {
+                imgSrc = p.image_url;
+            } else if (p.product_image) {
+                if (String(p.product_image).indexOf('uploads') !== -1) {
+                    imgSrc = '../' + String(p.product_image).replace(/^\/+/, '');
+                } else {
+                    imgSrc = '../uploads/' + String(p.product_image).replace(/^\/+/, '');
+                }
+            }
             const link = document.createElement('a');
             link.href = `single_product.php?product_id=${encodeURIComponent(p.product_id)}`;
             link.style.textDecoration = 'none';
             link.style.color = 'inherit';
+            const fallbackSrc = p.image_url || '../uploads/no-image.svg';
             card.innerHTML = `
                 <div style="height:150px;overflow:hidden;">
-                    <img src="${imgSrc}" alt="${(p.product_title||'Product')}" />
+                    <img src="${imgSrc}" alt="${(p.product_title||'Product')}" onerror="this.onerror=null;this.src='${fallbackSrc}'" />
                 </div>
                 <h5>${p.product_title || ''}</h5>
                 <p class="text-muted">${p.category || ''} • ${p.brand || ''}</p>
@@ -44,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         renderPager(totalPages);
-    }
+    };
 
     function renderPager(totalPages) {
         // create a basic pager below the product list
@@ -108,24 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function loadAllProducts() {
-        // if query param present, use search action
-        const urlParams = new URLSearchParams(window.location.search);
-        const q = urlParams.get('q') || (searchBox && searchBox.value) || '';
-        if (q && q.trim() !== '') {
-            fetch(`../actions/product_actions.php?action=search&query=${encodeURIComponent(q)}`)
-                .then(res => res.json())
-                .then(data => {
-                    products = Array.isArray(data) ? data : (data.data || []);
-                    renderProducts(products, 1);
-                    populateFilters(products);
-                })
-                .catch(err => {
-                    console.error('Search failed', err);
-                    if (productList) productList.innerHTML = '<p>Cannot load search results</p>';
-                });
-            return;
-        }
-
         fetch('../actions/fetch_product_action.php')
             .then(res => res.json())
             .then(data => {

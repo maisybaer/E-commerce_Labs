@@ -44,38 +44,37 @@ require_once '../settings/core.php';
 		<?php if (isset($_SESSION['user_id'])): ?>
 			
 			<a href="../index.php" class="btn btn-sm btn-outline-secondary">Home</a>
-			<a href="login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
+			<a href=" ../login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
             <a href="view/basket.php" class="btn btn-sm btn-outline-secondary">Basket</a>
 
 		<?php else: ?>
-			<a href="login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
-			<a href="login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
-		<?php endif; ?>			
-	</div>
+			<a href="../login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
+			<a href="../login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
+		<?php endif; ?>	
+    </div>
+
 
     
 	<div class="container" style="padding-top:120px;">
-		<div class="text-center"></div>
-
+		<div class="text-center">
+            
             <h1>All Products</h1>
             <p>Shop all our products</p>
+
         </div>
-    </div>
 
-    <div>
+            <div class="search-tray">
+                <input type="text" id="searchBox" placeholder="Search products...">
+                <button class="btn btn-sm btn-outline-secondary" id="searchBtn">Search</button>
 
-    <div class="container header-container">
-        <div class="row justify-content-center animate__animated animate__fadeInDown"></div>
-            <input type="text" id="searchBox" placeholder="Search products...">
-            <button id="searchBtn">Search</button>
+                <select id="categoryFilter">
+                    <option value="">Filter by Category</option>
+                </select>
 
-            <select id="categoryFilter">
-                <option value="">Filter by Category</option>
-            </select>
-
-            <select id="brandFilter">
-                <option value="">Filter by Brand</option>
-            </select>
+                <select id="brandFilter">
+                    <option value="">Filter by Brand</option>
+                </select>
+            </div>
         </div>
     </div>
 

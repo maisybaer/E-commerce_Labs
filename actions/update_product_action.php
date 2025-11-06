@@ -15,7 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle file upload if present
     if (isset($_FILES['productImage']) && $_FILES['productImage']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../product_uploads/';
+        // store uploads in the uploads/ folder (project root)
+        $uploadDir = __DIR__ . '/../uploads/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
         $fileTmp  = $_FILES['productImage']['tmp_name'];
@@ -27,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newFileName = uniqid('IMG_', true) . '.' . $fileExt;
             $destPath = $uploadDir . $newFileName;
             if (move_uploaded_file($fileTmp, $destPath)) {
-                $productImage = $destPath;
+                // store only the filename in DB; frontend resolves to /uploads/<filename>
+                $productImage = $newFileName;
             }
         }
     }

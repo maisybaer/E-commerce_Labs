@@ -25,6 +25,7 @@ $db = new db_connection();
 </head>
 
 <body>
+    <header>
 	<div class="menu-tray">
 		<span class="me-2">Menu:</span>
 		<?php if (isset($_SESSION['user_id'])): ?>
@@ -36,8 +37,9 @@ $db = new db_connection();
             <p><br>Login to see your Categories</p>
 		<?php endif; ?>			
 	</div>
+    </header>
 
-
+    <main>
     <div class="container header-container">
         <div class="row justify-content-center animate__animated animate__fadeInDown">
            
@@ -116,6 +118,7 @@ $db = new db_connection();
 
         </div>
     </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

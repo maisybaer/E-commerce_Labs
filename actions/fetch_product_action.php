@@ -13,9 +13,44 @@ if ($products === false || empty($products)) {
     exit;
 }
 
-// Return clean JSON
+
+$out = [];
+// determine site base (e.g. /E-commerce_Labs) to build site-relative URLs
+$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+$siteBase = dirname($scriptDir);
+if ($siteBase === '/' || $siteBase === '.') $siteBase = '';
+
+foreach ($products as $p) {
+    $item = $p;
+    $img = trim((string)($p['product_image'] ?? ''));
+    $imageUrl = '';
+
+    if ($img !== '') {
+        // absolute URL?
+        if (preg_match('#^https?://#i', $img)) {
+            $imageUrl = $img;
+        } else {
+            // treat as filename or relative path under uploads
+            $filename = basename($img);
+            $fs = realpath(__DIR__ . '/../uploads/' . $filename);
+            if ($fs && file_exists($fs)) {
+                // site-relative URL (includes site base if app is in a subfolder)
+                $imageUrl = $siteBase . '/uploads/' . $filename;
+            } else {
+                // fallback to a local placeholder inside uploads
+                $imageUrl = $siteBase . '/uploads/no-image.svg';
+            }
+        }
+    } else {
+        $imageUrl = $siteBase . '/uploads/no-image.svg';
+    }
+
+    $item['image_url'] = $imageUrl;
+    $out[] = $item;
+}
+
 header('Content-Type: application/json');
-echo json_encode($products);
+echo json_encode($out);
 exit;
 ?>
 

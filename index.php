@@ -9,7 +9,8 @@ if (!isset($_SESSION['user_id'])) {
 
 // get user info
 $user_id = getUserID();
-$user_name = getUserName($user_id) ?? '';
+$customer_name = getUserName($user_id) ?? '';
+echo $customer_name;
 $role = getUserRole();
 ?>
 
@@ -20,22 +21,15 @@ $role = getUserRole();
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Home</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-	<style>
-		.menu-tray {
-			position: fixed;
-			top: 16px;
-			right: 16px;
-			background: rgba(255,255,255,0.95);
-			border: 1px solid #e6e6e6;
-			border-radius: 8px;
-			padding: 6px 10px;
-			box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-			z-index: 1000;
-		}
-		.menu-tray a { margin-left: 8px; }
-	</style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="settings/styles.css">
+
 </head>
+
 <body>
+
+
 
 	<div class="menu-tray">
 		<?php if (isset($_SESSION['user_id'])): ?>
@@ -49,53 +43,149 @@ $role = getUserRole();
 		<?php endif; ?>			
 	</div>
 
+	<main>
+
 	<div class="container" style="padding-top:120px;">
 		<div class="text-center">
 
 			<?php if ($role == 1) : ?>
-				<h1>Welcome, <?php echo htmlspecialchars($user_name ?: 'Admin'); ?></h1>
-                <a href="admin/category.php" class="btn btn-sm btn-outline-primary">Categories</a>
-				<a href="admin/product.php" class="btn btn-sm btn-outline-primary">Products</a>
-				<a href="admin/customers.php" class="btn btn-sm btn-outline-primary">Customers</a>
-				<a href="admin/orders.php" class="btn btn-sm btn-outline-primary">Orders</a>
-				<a href="admin/brand.php" class="btn btn-sm btn-outline-primary">Brands</a>
-
-				<h3><br> To explore the customer view</h3>
-				<a href="view/all_product.php" class="btn btn-sm btn-outline-primary">Shop Products</a>
+				<h1>Welcome <?php echo htmlspecialchars($customer_name ?: 'Admin'); ?></h1>
 			<?php elseif ($role == 2) : ?>
-				<h1>Welcome, <?php echo htmlspecialchars($user_name ?: 'Guest'); ?>!</h1>
-				<p class="lead">Find something delicious in the shop below.</p>
-				<a href="view/all_product.php" class="btn btn-sm btn-outline-primary">Shop Products<br></a>
+				<h1>Welcome <?php echo htmlspecialchars($customer_name ?: 'Guest'); ?>!</h1>
+				<p class="lead">Find something special in the shop below.</p>
+			<?php endif; ?>
+		</div>
 
-				    <div class="container header-container">
-					
-				</div>
+		    <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card fade-in">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <h3>Shop</h3>
+                            </div>
+
+                            <!-- Search and Filters -->
+                            <div class="search-tray mb-4">
+                                <i class="fas fa-search text-muted"></i>
+                                <input type="text" id="searchBox" placeholder="Search products...">
+                                
+                                <select id="categoryFilter">
+                                    <option value="">All Categories</option>
+                                </select>
+
+                                <select id="brandFilter">
+                                    <option value="">All Brands</option>
+                                </select>
+
+                                <button class="btn btn-sm" id="searchBtn">
+                                    Search
+                                </button>
+                            </div>
+
+                            <div class="text-center">
+                                <a href="view/all_product.php" class="btn btn-custom btn-lg">
+                                    Browse All Products
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+		<div class="product-grid">
+			<?php if ($role == 1) : ?>
+                        <!-- Categories Card -->
+                        <div class="product-card">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3" style="font-size: 3rem; color: var(--brand);">
+                                        <i class="fas fa-layer-group"></i>
+                                    </div>
+                                    <h5>Categories</h5>
+                                    <p class="text-muted">Manage product categories</p>
+                                    <a href="admin/category.php" class="btn btn-custom mt-2">
+                                        <i class="fas fa-arrow-right me-2"></i>Manage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Products Card -->
+                        <div class="product-card">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3" style="font-size: 3rem; color: var(--brand);">
+                                        <i class="fas fa-box-open"></i>
+                                    </div>
+                                    <h5>Products</h5>
+                                    <p class="text-muted">Edit your product catalog</p>
+                                    <a href="admin/product.php" class="btn btn-custom mt-2">
+                                        <i class="fas fa-arrow-right me-2"></i>Manage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Customers Card -->
+                        <div class="product-card">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3" style="font-size: 3rem; color: var(--brand);">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <h5>Customers</h5>
+                                    <p class="text-muted">View customer information</p>
+                                    <a href="admin/customer.php" class="btn btn-custom mt-2">
+                                        <i class="fas fa-arrow-right me-2"></i>View
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Orders Card -->
+                        <div class="product-card">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3" style="font-size: 3rem; color: var(--brand);">
+                                        <i class="fas fa-shopping-bag"></i>
+                                    </div>
+                                    <h5>Orders</h5>
+                                    <p class="text-muted">Track all orders</p>
+                                    <a href="admin/orders.php" class="btn btn-custom mt-2">
+                                        <i class="fas fa-arrow-right me-2"></i>View
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Brands Card -->
+                        <div class="product-card">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3" style="font-size: 3rem; color: var(--brand);">
+                                        <i class="fas fa-tag"></i>
+                                    </div>
+                                    <h5>Brands</h5>
+                                    <p class="text-muted">Manage available brands</p>
+                                    <a href="admin/brand.php" class="btn btn-custom mt-2">
+                                        <i class="fas fa-arrow-right me-2"></i>Manage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+            
+        </div>
+
 	
 			<?php endif; ?>
+	
 
-			<div class="row justify-content-center animate__animated animate__fadeInDown"></div>
-					<input type="text" id="searchBox" placeholder="Search products...">
-					<button id="searchBtn">Search</button>
 
-					<select id="categoryFilter">
-						<option value="">Filter by Category</option>
-					</select>
-
-					<select id="brandFilter">
-						<option value="">Filter by Brand</option>
-					</select>
-			</div>
-
-			<?php if (isset($_SESSION['user_id'])): ?>
-				<p class="text-muted">Use the menu in the top-right to Logout.</p>			
-			<?php else: ?>
-				<p class="text-muted">Use the menu in the top-right to Register or Login.</p>
-			<?php endif; ?>
-
-			
-
-		</div>
+	
 	</div>
+	</main>
+
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

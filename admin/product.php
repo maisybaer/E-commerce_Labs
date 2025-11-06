@@ -32,6 +32,7 @@ $allCat=get_all_cat_ctr();
 </head>
 
 <body>
+    <head>
 	<div class="menu-tray">
 		<span class="me-2">Menu:</span>
 		<?php if (isset($_SESSION['user_id'])): ?>
@@ -40,11 +41,13 @@ $allCat=get_all_cat_ctr();
 		<?php else: ?>
             <a href="../index.php" class="btn btn-sm btn-outline-primary">Home</a>
 			<a href="../login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
-            <p><br>Login to see your Products</p>
+            <a href="../login/register.php" class="btn btn-sm btn-outline-secondary">Register</a>
+            <p><br>Login or Register to see your Products</p>
 		<?php endif; ?>			
 	</div>
+        </head>
 
-
+    <main>
     <div class="container header-container">
         <div class="row justify-content-center animate__animated animate__fadeInDown">
            
@@ -78,7 +81,7 @@ $allCat=get_all_cat_ctr();
                                     <option value="">Select Brand</option>
                                     <?php foreach ($allBrand as $brand): ?>
                                         <option value="<?php echo htmlspecialchars($brand['brand_id']); ?>">
-                                        <?php echo htmlspecialchars($brand['brand_name']); ?>
+                                        <<?php echo htmlspecialchars($brand['brand_name']); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -204,6 +207,7 @@ $allCat=get_all_cat_ctr();
 
         </div>
     </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

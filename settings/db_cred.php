@@ -9,15 +9,15 @@
 
 
 if (!defined("SERVER")) {
-    define("SERVER", "localhost");
+    define("SERVER", "169.239.251.102");
 }
 
 if (!defined("USERNAME")) {
-    define("USERNAME", "root");
+    define("USERNAME", "maisy.baer");
 }
 
 if (!defined("PASSWD")) {
-    define("PASSWD", "");
+    define("PASSWD", "smarty8Aa.g@");
 }
 
 if (!defined("DATABASE")) {

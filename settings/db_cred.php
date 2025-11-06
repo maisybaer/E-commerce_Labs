@@ -13,7 +13,7 @@ if (!defined("SERVER")) {
 }
 
 if (!defined("USERNAME")) {
-    define(constant_name: "USERNAME", "root");
+    define("USERNAME", "root");
 }
 
 if (!defined("PASSWD")) {

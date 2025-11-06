@@ -25,15 +25,15 @@
 //}
 
 if (!defined("SERVER")) {
-    define("SERVER", "169.239.251.102");
+    define("SERVER", "localhost");
 }
 
 if (!defined("USERNAME")) {
-    define("USERNAME", "maisy.baer");
+    define("USERNAME", "root");
 }
 
 if (!defined("PASSWD")) {
-    define("PASSWD", "smarty8Aa.g@");
+    define("PASSWD", "");
 }
 
 if (!defined("DATABASE")) {

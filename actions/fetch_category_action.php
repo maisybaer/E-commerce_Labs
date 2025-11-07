@@ -6,7 +6,6 @@ $user_id = getUserID();
 
 //fetch category based on user id
 $cat = get_cat_ctr($user_id);
-echo json_encode($cat);
 
 //fetch all categories
 $cat = get_all_cat_ctr();

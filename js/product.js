@@ -99,178 +99,237 @@ function createUpdatePopup() {
     popup.id = "updatePopupContainer";
     popup.style.display = "none";
 
-        popup.innerHTML = `
-            <div class="card" style="max-width:auto;margin:auto;">
-                <div class="card-body">
-                    <form id="updateProductForm">
-                        <div class="mb-3">
+    popup.innerHTML = `
+        <div class="card" style="max-width:auto;margin:auto;">
+            <div class="card-body">
+                <form id="updateProductForm">
+                    <div class="mb-3">
+                        <input type="hidden" id="updateProductID">
 
-                            <input type="hidden" id="updateProductID">
+                        <label for="updateProductCat" class="form-label">New Product Category</label>
+                        <select class="form-control" id="updateProductCat" name="updateProductCat" required>
+                            <option value="">Select Category</option>
+                        </select>
 
-                            <!-- Update Product Category -->
+                        <label for="updateProductBrand" class="form-label">New Product Brand</label>
+                        <select class="form-control" id="updateProductBrand" name="updateProductBrand" required>
+                            <option value="">Select Brand</option>
+                        </select>
 
-                            <label for="updateProductCat" class="form-label">New Product Category</label>
-                            <select class="form-control" id="updateProductCat" name="updateProductCat" required>
-                                <option value="">Select Category</option>
-                                <?php foreach ($allCat as $cat): ?>
-                                    <option value="<?php echo htmlspecialchars($cat['cat_id']); ?>">
-                                    <?php echo htmlspecialchars($cat['cat_name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <label for="updateProductTitle" class="form-label">New Product Title</label>
+                        <input type="text" class="form-control" id="updateProductTitle" name="updateProductTitle" required>
 
-                            <!-- Update Product Brand -->
-                            <label for="updateProductBrand" class="form-label" >New Product Brand</label>
-                            <select class="form-control" id="updateProductBrand" name="updateProductBrand" required>
-                                <option value="">Select Brand</option>
-                                <?php foreach ($allBrand as $brand): ?>
-                                    <option value="<?php echo htmlspecialchars($brand['brand_id']); ?>">
-                                    <?php echo htmlspecialchars($brand['brand_name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                    
-                            <!-- Update Product Title -->
-                            <label for="updateProductTitle" class="form-label">New Product Title</label>
-                            <input type="text" class="form-control" id="updateProductTitle" name="updateProductTitle" required>
+                        <label for="updateProductPrice" class="form-label">New Product Price</label>
+                        <input type="number" step="0.01" class="form-control" id="updateProductPrice" name="updateProductPrice" required>
 
-                            <!-- Update Product Price -->
-                            <label for="updateProductPrice" class="form-label">New Product Price</label>
-                            <input type="number" class="form-control" id="updateProductPrice" name="updateProductPrice" required>
+                        <label for="updateProductDes" class="form-label">New Product Description</label>
+                        <textarea class="form-control" id="updateProductDes" name="updateProductDesc" required></textarea>
 
-                            <!-- Update Product Description -->
-                            <label for="updateProductDes" class="form-label">New Product Description</label>
-                            <input type="text" class="form-control" id="updateProductDes" name="updateProductDesc" required>
+                        <label for="updateProductImage" class="form-label">New Product Image</label>
+                        <input type="file" class="form-control" id="updateProductImage" name="updateProductImage">
 
-                            <!-- Update Product Image -->
-                            <label for="updateProductImage" class="form-label">New Product Image</label>
-                            <input type="file" class="form-control" id="updateProductImage" name="updateProductImage">
-
-                            <!-- Update Product Keywords -->
-                            <label for="updateProductKey" class="form-label">New Product Keywords</label>
-                            <input type="text" class="form-control" id="updateProductKey" name="updateProductKey" required>
-                       
-                        </div>
-                        <button type="submit" class="btn btn-custom w-100">Update</button>
-                        <button type="button" class="btn btn-secondary w-100 mt-2" id="closeEditPopup">Cancel</button>
-                    </form>
-                </div>
+                        <label for="updateProductKey" class="form-label">New Product Keywords</label>
+                        <input type="text" class="form-control" id="updateProductKey" name="updateProductKey" required>
+                    </div>
+                    <button type="submit" class="btn btn-custom w-100">Update</button>
+                    <button type="button" class="btn btn-secondary w-100 mt-2" id="closeEditPopup">Cancel</button>
+                </form>
             </div>
-        `;
-        document.body.appendChild(popup);
+        </div>
+    `;
 
-        document.getElementById("closeEditPopup").onclick = closeForm;
+    document.body.appendChild(popup);
 
-        document.getElementById("updateProductForm").onsubmit = function(e) {
-            e.preventDefault();
-            let product_id = document.getElementById("updateProductID").value;
-            let productCat = document.getElementById("updateProductCat").value;
-            let productBrand = document.getElementById("updateProductBrand").value;
-            let productTitle = document.getElementById("updateProductTitle").value;
-            let productPrice = document.getElementById("updateProductPrice").value;
-            let productDes = document.getElementById("updateProductDes").value;
-            let productKey = document.getElementById("updateProductKey").value;
-            let imageFile = document.getElementById("updateProductImage").files[0];
-           
-            let formData = new FormData();
-            formData.append("product_id", currentEditProductID);
-            formData.append("productCat", productCat);
-            formData.append("productBrand", productBrand);
-            formData.append("productTitle", productTitle);
-            formData.append("productPrice", productPrice);
-            formData.append("productDes", productDes);
-            formData.append("productKey", productKey);
-            if (imageFile) formData.append("productImage", imageFile);
+    document.getElementById("closeEditPopup").onclick = closeForm;
 
-            fetch("../actions/update_product_action.php", {
-                method: "POST",
-                body: formData
+    document.getElementById("updateProductForm").onsubmit = function(e) {
+        e.preventDefault();
+
+        let productCat = document.getElementById("updateProductCat").value;
+        let productBrand = document.getElementById("updateProductBrand").value;
+        let productTitle = document.getElementById("updateProductTitle").value;
+        let productPrice = document.getElementById("updateProductPrice").value;
+        let productDes = document.getElementById("updateProductDes").value;
+        let productKey = document.getElementById("updateProductKey").value;
+        let imageFile = document.getElementById("updateProductImage").files[0];
+
+        let formData = new FormData();
+        formData.append("product_id", currentUpdateProductId);
+        formData.append("productCat", productCat);
+        formData.append("productBrand", productBrand);
+        formData.append("productTitle", productTitle);
+        formData.append("productPrice", productPrice);
+        formData.append("productDes", productDes);
+        formData.append("productKey", productKey);
+        if (imageFile) formData.append("productImage", imageFile);
+
+        fetch("../actions/update_product_action.php", {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(resp => {
+                Swal.fire({
+                    icon: resp.status === 'success' ? 'success' : 'error',
+                    title: resp.status === 'success' ? 'Updated!' : 'Error',
+                    text: resp.message,
+                }).then(() => {
+                    closeForm();
+                    loadProducts();
+                });
             })
-                .then(res => res.json())
-                .then(resp => {
-                    Swal.fire({
-                        icon: resp.status,
-                        title: resp.status === 'success' ? 'Updated!' : 'Error',
-                        text: resp.message,
-                    }).then(() => {
-                        closeForm();
-                        loadProducts();
-                    });
-                })
-                .catch(err => console.error("Update Error:", err));
-        };
+            .catch(err => {
+                console.error("Update Error:", err);
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Update failed' });
+            });
+    };
+}
+
+function openForm(product) {
+    // Accept either an object or a JSON string
+    if (typeof product === 'string') {
+        try { product = JSON.parse(product); } catch (e) { console.error('Invalid product JSON', e); return; }
     }
 
-    function openForm(product_id) {
-        currentEditProductId = product_id;
-        populateDropdowns(productCat, productBrand);
+    currentUpdateProductId = product.product_id;
 
-        document.getElementById("updateProductTitle").value = productTitle;
-        document.getElementById("updateProductprice").value = productPrice;
-        document.getElementById("updateProductDesc").value = productDes;
-        document.getElementById("updateProductKey").value = productKey;
-        popup.style.display = "block";
-    }
+    createUpdatePopup();
 
-    function closeForm() {
-        let popup = document.getElementById("updatePopupContainer");
-        popup.style.display = "none";
-    }
+    // Populate hidden id
+    const idEl = document.getElementById('updateProductID');
+    if (idEl) idEl.value = product.product_id || '';
+
+    // Populate other fields immediately
+    const titleField = document.getElementById('updateProductTitle'); if (titleField) titleField.value = product.product_title || product.productTitle || '';
+    const priceField = document.getElementById('updateProductPrice'); if (priceField) priceField.value = product.product_price || product.productPrice || '';
+    const descField = document.getElementById('updateProductDes'); if (descField) descField.value = product.product_desc || product.productDes || '';
+    const keyField = document.getElementById('updateProductKey'); if (keyField) keyField.value = product.product_keywords || product.productKey || '';
+
+    // Populate dropdowns (pass ids) - wait for them to load before showing popup so selection is visible
+    populateDropdowns(product.product_cat || product.productCat || '', product.product_brand || product.productBrand || '')
+        .then(() => {
+            const popup = document.getElementById('updatePopupContainer');
+            if (popup) popup.style.display = 'block';
+        })
+        .catch(err => {
+            console.error('populateDropdowns error:', err);
+            const popup = document.getElementById('updatePopupContainer');
+            if (popup) popup.style.display = 'block';
+        });
+}
+
+function closeForm() {
+    let popup = document.getElementById("updatePopupContainer");
+    if (popup) popup.style.display = "none";
+}
 
 
-    //FETCH PRODUCTS
+    // FETCH PRODUCTS (admin table)
     function loadProducts() {
         fetch("../actions/fetch_product_action.php")
             .then(res => res.json())
             .then(data => {
                 tableBody.innerHTML = "";
-                if (data.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="3">No product available</td></tr>`;
-                } else {
-                    data.forEach(product => {
-                        let row = `
-                        <tr>
-                            <td>${product.product_id}</td>
-                            <td>${product.product_cat}</td>
-                            <td>${product.product_brand}</td>
-                            <td>${product.product_title}</td>
-                            <td>${product.product_price}</td>
-                            <td>${product.product_desc}</td>
-                            <td><img src="../images/product/${product.product_image}" width="50"></td>
-                            <td>${product.product_keywords}</td>
-                            <td>
-                                <button class="btn btn-sm btn-custom" onclick='openForm(${JSON.stringify(product)})'>Edit</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.product_id})">Delete</button>
-                            </td>
-                        </tr>`;
-                    
-                        tableBody.innerHTML += row;
-                    });
+                if (!Array.isArray(data) || data.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="9" class="text-center">No product available</td></tr>`;
+                    return;
                 }
+
+                data.forEach(product => {
+                    const tr = document.createElement('tr');
+
+                    const tdId = document.createElement('td'); tdId.textContent = product.product_id;
+                    const tdCat = document.createElement('td'); tdCat.textContent = product.category || product.cat_name || product.product_cat || 'N/A';
+                    const tdBrand = document.createElement('td'); tdBrand.textContent = product.brand || product.brand_name || product.product_brand || 'N/A';
+                    const tdTitle = document.createElement('td'); tdTitle.textContent = product.product_title;
+                    const tdPrice = document.createElement('td'); tdPrice.textContent = product.product_price;
+                    const tdDesc = document.createElement('td'); tdDesc.textContent = product.product_desc;
+
+                    const tdImg = document.createElement('td');
+                    const img = document.createElement('img');
+
+                    // Choose src: prefer server-provided image_url, else construct from product_image
+                    let srcCandidate = product.image_url || (product.product_image ? ('uploads/' + product.product_image) : 'uploads/no-image.svg');
+                    if (/^https?:\/\//i.test(srcCandidate)) {
+                        img.src = srcCandidate;
+                    } else if (srcCandidate.startsWith('/')) {
+                        img.src = srcCandidate; // root-relative
+                    } else if (srcCandidate.startsWith('uploads/') || srcCandidate.startsWith('../uploads/')) {
+                        img.src = '../' + srcCandidate.replace(/^\.\.?\//, '');
+                    } else {
+                        img.src = '../uploads/' + srcCandidate.replace(/^\.\/+/, '');
+                    }
+
+                    img.width = 50;
+                    img.alt = product.product_title || '';
+                    img.onerror = function () { this.onerror = null; this.src = '../uploads/no-image.svg'; };
+                    tdImg.appendChild(img);
+
+                    const tdKey = document.createElement('td'); tdKey.textContent = product.product_keywords || '';
+                    const tdActions = document.createElement('td');
+
+                    const editBtn = document.createElement('button'); editBtn.className = 'btn btn-sm btn-custom'; editBtn.textContent = 'Edit';
+                    // Pass the product object to the product edit opener. Prefer product-specific opener if present.
+                    editBtn.addEventListener('click', () => {
+                        const opener = window.openProductEditForm || window.openForm;
+                        if (opener) opener(product);
+                    });
+                    const delBtn = document.createElement('button'); delBtn.className = 'btn btn-sm btn-danger'; delBtn.textContent = 'Delete';
+                    delBtn.addEventListener('click', () => { if (window.deleteProduct) window.deleteProduct(product.product_id); });
+
+                    tdActions.appendChild(editBtn); tdActions.appendChild(document.createTextNode(' ')); tdActions.appendChild(delBtn);
+
+                    tr.appendChild(tdId);
+                    tr.appendChild(tdCat);
+                    tr.appendChild(tdBrand);
+                    tr.appendChild(tdTitle);
+                    tr.appendChild(tdPrice);
+                    tr.appendChild(tdDesc);
+                    tr.appendChild(tdImg);
+                    tr.appendChild(tdKey);
+                    tr.appendChild(tdActions);
+
+                    tableBody.appendChild(tr);
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load admin products', err);
+                tableBody.innerHTML = `<tr><td colspan="9" class="text-center text-danger">Error loading products.</td></tr>`;
             });
     }
 
 function populateDropdowns(selectedCat, selectedBrand) {
         // Fetch category and brand lists from the PHP side
-        fetch("../actions/fetch_category_action.php")
+        const catPromise = fetch("../actions/fetch_category_action.php")
             .then(res => res.json())
             .then(cats => {
                 let catSelect = document.getElementById("updateProductCat");
+                if (!catSelect) return;
                 catSelect.innerHTML = `<option value="">Select Category</option>`;
                 cats.forEach(c => {
-                    catSelect.innerHTML += `<option value="${c.cat_id}" ${c.cat_name === selectedCat ? 'selected' : ''}>${c.cat_name}</option>`;
+                    catSelect.innerHTML += `<option value="${c.cat_id}">${c.cat_name}</option>`;
                 });
+                // try to set selected by id (coerce to string)
+                if (selectedCat !== undefined && selectedCat !== null && selectedCat !== '') {
+                    catSelect.value = String(selectedCat);
+                }
             });
 
-        fetch("../actions/fetch_brand_action.php")
+        const brandPromise = fetch("../actions/fetch_brand_action.php")
             .then(res => res.json())
             .then(brands => {
                 let brandSelect = document.getElementById("updateProductBrand");
+                if (!brandSelect) return;
                 brandSelect.innerHTML = `<option value="">Select Brand</option>`;
                 brands.forEach(b => {
-                    brandSelect.innerHTML += `<option value="${b.brand_id}" ${b.brand_name === selectedBrand ? 'selected' : ''}>${b.brand_name}</option>`;
+                    brandSelect.innerHTML += `<option value="${b.brand_id}">${b.brand_name}</option>`;
                 });
+                if (selectedBrand !== undefined && selectedBrand !== null && selectedBrand !== '') {
+                    brandSelect.value = String(selectedBrand);
+                }
             });
+
+        return Promise.all([catPromise, brandPromise]);
     }
 
 //Delete Product
@@ -299,100 +358,15 @@ function populateDropdowns(selectedCat, selectedBrand) {
         });
     };
 
-    // Expose openForm globally for inline button
-    window.openForm = openForm;
+    // Expose product-specific global and also assign to openForm as a fallback
+    window.openProductEditForm = openForm;
+    if (!window.openForm) window.openForm = openForm;
 
     createUpdatePopup();
     closeForm();
-    loadProducts();
+    // Only try to load admin products if the table is present on the page
+    if (tableBody) loadProducts();
 
-
-
-    //-------------------------------------
-    //VIEW VIEW VIEW VIEW VIEW VIEW VIEW
-    //-------------------------------------
-
-    ////-------------------------------------
-    //ALL JS FOR PRODUCTS PAGE
-    //-------------------------------------
-
-    ////-------------------------------------
-    //ALL JS FOR ALL PRODUCTS PAGE
-    //-------------------------------------
-
-    // Function to load all products
-document.addEventListener("DOMContentLoaded", () => {
-    const tableBody = document.querySelector("#productTable tbody");
-
-    function loadAllProducts() {
-        fetch("../actions/fetch_product_action.php")
-            .then(async response => {
-                // Log and check raw response text
-                const text = await response.text();
-                console.log("Raw response:", text);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error ${response.status}`);
-                }
-
-                // Try parsing JSON
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    console.error("Response was not valid JSON:", text);
-                    throw e;
-                }
-            })
-            .then(data => {
-                tableBody.innerHTML = ""; // Clear old rows
-
-                if (Array.isArray(data) && data.length > 0) {
-                    data.forEach(product => {
-                        const row = document.createElement("tr");
-
-                        row.innerHTML = `
-                            <td>${product.product_id}</td>
-                            <td>${product.cat_name || "N/A"}</td>
-                            <td>${product.brand_name || "N/A"}</td>
-                            <td>${product.product_title}</td>
-                            <td>${product.product_desc}</td>
-                            <td><img src="${product.product_image}" alt="Image" width="60"></td>
-                            <td>${parseFloat(product.product_price).toFixed(2)}</td>
-                        `;
-
-                        tableBody.appendChild(row);
-                    });
-                } else {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="7" class="text-center text-muted">No products found.</td>
-                        </tr>
-                    `;
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching products:", error);
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="text-center text-danger">Error loading products.</td>
-                    </tr>
-                `;
-            });
-    }
-
-    // Load products on page load
-    loadAllProducts();
-});
-
-
-
-    ////-------------------------------------
-    //ALL JS FOR PRODUCT SEARCH PAGE
-    //-------------------------------------
-
-    ////-------------------------------------
-    //ALL JS FOR SINGLE PRODUCT PAGE
-    //-------------------------------------
 
     
 });

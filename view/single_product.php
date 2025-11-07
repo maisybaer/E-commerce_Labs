@@ -44,6 +44,12 @@ if ($product_id > 0) {
     <div>
         <div class="container" style="padding-top:120px;">
 
+            <div class="text-center">
+                
+                <h1>View Item</h1>
+
+            </div>
+
             <div class="search-tray">
                 <input type="text" id="searchBox" placeholder="Search products...">
                 <button class="btn btn-sm btn-outline-secondary" id="searchBtn">Search</button>

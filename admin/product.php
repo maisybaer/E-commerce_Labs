@@ -2,15 +2,12 @@
 //session_start();
 
 require_once '../settings/core.php';
-require_once '../settings/db_class.php';
 require_once '../actions/fetch_category_action.php';
 require_once '../actions/fetch_brand_action.php';
 
 $user_id = getUserID();
 $role = getUserRole();
 
-
-$db = new db_connection();
 
 //get categories and brands for dropdowns
 $allBrand=get_all_brands_ctr();
@@ -58,7 +55,7 @@ $allCat=get_all_cat_ctr();
             <div class="col-md-6">
                 <div class="card animate__animated animate__zoomIn">
                     <div class="card-header text-center highlight">
-                        <h4>Create a new category</h4>
+                        <h4>Create a new products</h4>
                     </div>
 
                     <div class="card-body">
@@ -81,7 +78,7 @@ $allCat=get_all_cat_ctr();
                                     <option value="">Select Brand</option>
                                     <?php foreach ($allBrand as $brand): ?>
                                         <option value="<?php echo htmlspecialchars($brand['brand_id']); ?>">
-                                        <<?php echo htmlspecialchars($brand['brand_name']); ?>
+                                        <?php echo htmlspecialchars($brand['brand_name']); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -112,12 +109,13 @@ $allCat=get_all_cat_ctr();
             <div class="col-md-6">
                 <div class="card animate__animated animate__zoomIn">
                     <div class="card-header text-center highlight">
-                        <h4>Your current Categories</h4>
+                        <h4>Your current Products</h4>
                     </div>
 
 
                     <div class="card-body">
-                        <table id="productTable">
+                        <div class="table-responsive">
+                        <table id="productTable" class="table table-sm table-striped table-bordered" style="min-width:900px;">
                             <thead>
                                 <tr>
                                     <th>Product ID</th>
@@ -135,6 +133,7 @@ $allCat=get_all_cat_ctr();
                                 <tr>
                                     <td colspan="9" class="text-center">No product available</td>
                                 <tr>
+                                    
                             
                                         <!-- Update Product Popup -->
                                             <div id="updatePopup" class="form-popup">
@@ -201,6 +200,7 @@ $allCat=get_all_cat_ctr();
                             </tbody>
 
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>

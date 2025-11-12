@@ -20,8 +20,19 @@ if ($product_id > 0) {
     <link rel="stylesheet" href="../settings/styles.css">
     
     <style>
-        .product-image { max-width: 400px; }
-        .product-container { padding-top: 120px; }
+        body { background-color: #f8f9fa; }
+        .product-container { padding-top: 100px; }
+        .card { max-width: 500px; margin: auto; }
+        .product-image { max-width: 100%; border-radius: 10px; }
+        .menu-tray {
+            position: fixed; top: 16px; right: 16px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid #e9e9e9;
+            border-radius: 10px; padding: 6px 10px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+            z-index: 1200;
+        }
+    </style>
     
     </style>
 
@@ -113,7 +124,7 @@ if ($product_id > 0) {
                         <div class="card-footer text-center">
                             <form action="#" method="POST">
                                 <input type="hidden" name="product_id" value="<?php echo (int)$product['product_id']; ?>">
-                                <button class="btn btn-primary">Add to Cart</button>
+                                <button id="addToCartBtn" class="btn btn-primary mt-2" data-id="<?php echo (int)$product['product_id']; ?>">Add to Cart</button>
                             </form>
                         </div>
                     </div>
@@ -127,6 +138,45 @@ if ($product_id > 0) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../js/all_products.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#addToCartBtn').on('click', function(e){
+                e.preventDefault();
+                const productId = $(this).data('id');
+                
+                $.ajax({
+                    url: '../actions/add_to_cart_action.php',
+                    method: 'POST',
+                    data: { product_id: productId, quantity: 1 },
+                    dataType: 'json',
+                    success: function(response) {
+                        if(response.status === 'success'){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added to Cart!',
+                                text: response.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function(){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to add item to cart. Please try again.'
+                        });
+                    }
+                });
+            });
+        });
+        </script>
 
 </body>
 </html>

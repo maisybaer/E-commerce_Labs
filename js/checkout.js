@@ -1,26 +1,91 @@
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(function() {
+    
+    const paymentModal = $('#paymentModal');
+    const simulatePayBtn = $('#simulatePayBtn');
+    const confirmPayBtn = $('#confirmPayBtn');
+    const cancelPayBtn = $('#cancelPayBtn');
+    const messageContainer = $('#checkoutMessage');
 
-    const payBtn = document.getElementById("simulatePayBtn");
-    const cancelBtn = document.getElementById("cancelPayBtn");
-    const modal = document.getElementById("paymentModal");
-    const messageContainer = document.getElementById("checkoutMessage");
+    // Show payment modal when simulate payment button is clicked
+    simulatePayBtn.on('click', function() {
+        paymentModal.addClass('active');
+    });
 
-    payBtn?.addEventListener("click", async () => {
-        const res = await fetch('process_checkout_action.php', { method: 'POST' });
-        const data = await res.json();
+    // Cancel payment
+    cancelPayBtn.on('click', function() {
+        paymentModal.removeClass('active');
+        messageContainer.html(`
+            <div class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle"></i> Payment cancelled.
+            </div>
+        `);
+    });
 
-        if (data.status === 'success') {
-            messageContainer.innerHTML = `<p>Payment successful! Your order reference: ${data.invoice_no}</p>`;
-        } else {
-            messageContainer.innerHTML = `<p>Payment failed: ${data.message}</p>`;
+    // Confirm payment and process checkout
+    confirmPayBtn.on('click', function() {
+        // Disable button to prevent double submission
+        confirmPayBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+
+        $.ajax({
+            url: '../actions/process_checkout_action.php',
+            method: 'POST',
+            dataType: 'json',
+            success: function(response) {
+                paymentModal.removeClass('active');
+                
+                if (response.status === 'success') {
+                    // Show success message with order details
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Order Placed Successfully!',
+                        html: `
+                            <p><strong>Order Reference:</strong> ${response.invoice_no}</p>
+                            <p><strong>Total Amount:</strong> $${response.total_amount}</p>
+                            <p>Thank you for your purchase!</p>
+                        `,
+                        confirmButtonText: 'Continue Shopping',
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'all_product.php';
+                        }
+                    });
+                } else {
+                    // Show error message
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Payment Failed',
+                        text: response.message,
+                        confirmButtonText: 'Try Again'
+                    });
+                    confirmPayBtn.prop('disabled', false).html('<i class="fas fa-check"></i> Yes, I\'ve Paid');
+                }
+            },
+            error: function(xhr, status, error) {
+                paymentModal.removeClass('active');
+                console.error('Checkout error:', error);
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred during checkout. Please try again.',
+                    confirmButtonText: 'OK'
+                });
+                
+                confirmPayBtn.prop('disabled', false).html('<i class="fas fa-check"></i> Yes, I\'ve Paid');
+            }
+        });
+    });
+
+    // Close modal when clicking outside
+    paymentModal.on('click', function(e) {
+        if ($(e.target).is('#paymentModal')) {
+            paymentModal.removeClass('active');
+            messageContainer.html(`
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> Payment cancelled.
+                </div>
+            `);
         }
-
-        modal.style.display = 'none';
     });
-
-    cancelBtn?.addEventListener("click", () => {
-        modal.style.display = 'none';
-        messageContainer.innerHTML = "<p>Payment cancelled.</p>";
-    });
-
 });

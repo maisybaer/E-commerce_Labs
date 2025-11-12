@@ -12,56 +12,50 @@ class CartController
 
     /**
      * Add a product to the cart
-     * $params: ['product_id' => int, 'qty' => int]
      */
-    public function add_to_cart_ctr($user_id,)
+    public function add_to_cart_ctr($product_id, $customer_id, $qty)
     {
-        $product_id = $params['product_id'];
-        $qty = $params['qty'];
-
-        // Check if product already exists in cart
-        if ($this->cart->existingProductCheck($product_id)) {
-            // Increment quantity
-            return $this->cart->addToCart($product_id, $qty);
-        } else {
-            // Add new product
-            return $this->cart->addToCart($product_id, $qty);
-        }
+        return $this->cart->addToCart($product_id, $customer_id, $qty);
     }
 
     /**
      * Update the quantity of an existing cart item
      */
-    public function update_cart_item_ctr($product_id, $qty)
+    public function update_cart_item_ctr($product_id, $customer_id, $qty)
     {
-        return $this->cart->updateCart($product_id, $qty);
+        return $this->cart->updateCart($product_id, $customer_id, $qty);
     }
 
     /**
      * Remove a product from the cart
      */
-    public function remove_from_cart_ctr($product_id)
+    public function remove_from_cart_ctr($product_id, $customer_id)
     {
-        return $this->cart->removeFromCart($product_id);
+        return $this->cart->removeFromCart($product_id, $customer_id);
     }
 
     /**
      * Get all items in the user's cart
      */
-    public function get_user_cart_ctr()
+    public function get_user_cart_ctr($customer_id)
     {
-        // Using session user ID
-        $customer_id = $_SESSION['user_id'];
-        return $this->cart->getCart();
+        return $this->cart->getCart($customer_id);
     }
 
     /**
      * Empty the user's cart
      */
-    public function empty_cart_ctr()
+    public function empty_cart_ctr($customer_id)
     {
-        $customer_id = $_SESSION['user_id'];
-        return $this->cart->emptyCart();
+        return $this->cart->emptyCart($customer_id);
+    }
+
+    /**
+     * Check if product exists in cart
+     */
+    public function check_existing_product_ctr($product_id, $customer_id)
+    {
+        return $this->cart->existingProductCheck($product_id, $customer_id);
     }
 }
 ?>

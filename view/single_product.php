@@ -44,7 +44,7 @@ if ($product_id > 0) {
         <?php if (isset($_SESSION['user_id'])): ?>
             <a href="../index.php" class="btn btn-sm btn-outline-secondary">Home</a>
             <a href="../login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
-            <a href="basket.php" class="btn btn-sm btn-outline-secondary">Basket</a>
+            <a href="cart.php" class="btn btn-sm btn-outline-secondary">Cart</a>
             <a href="all_product.php" class="btn btn-sm btn-outline-secondary">Back</a>
         <?php else: ?>
             <a href="../login/register.php" class="btn btn-sm btn-outline-primary">Register</a>

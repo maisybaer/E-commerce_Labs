@@ -1,105 +1,159 @@
 <?php
 require_once '../settings/core.php';
-require_once '../settings/db_class.php';
-//require_once '../controllers/cart_controller.php';
+require_once '../controllers/cart_controller.php';
 
-$user_id = getUserID();
-$role = getUserRole();
-//$cart_items = get_user_cart_ctr($customer_id);
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../login/login.php');
+    exit;
+}
 
-$db = new db_connection();
+$user_id = $_SESSION['user_id'];
+$cartController = new CartController();
+$cart_items = $cartController->get_user_cart_ctr($user_id);
 
+// Calculate total
+$cart_total = 0;
+if (!empty($cart_items)) {
+    foreach ($cart_items as $item) {
+        $cart_total += $item['qty'] * $item['product_price'];
+    }
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Cart</title>
+    <title>Shopping Cart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../settings/styles.css">
+    <style>
+        .cart-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 24px;
+        }
+        .cart-table {
+            width: 100%;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        .cart-table thead {
+            background: linear-gradient(135deg, var(--brand) 0%, var(--brand-dark) 100%);
+            color: #fff;
+        }
+        .cart-table th, .cart-table td {
+            padding: 16px;
+            text-align: left;
+        }
+        .cart-table img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .qty-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid #e8e8e8;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .cart-summary {
+            background: #fff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            margin-top: 24px;
+        }
+        .cart-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .empty-msg {
+            text-align: center;
+            padding: 60px 24px;
+            color: var(--muted);
+        }
+    </style>
 </head>
 
 <body>
     <header class="menu-tray mb-3">
-        <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="../index.php" class="btn btn-sm btn-outline-secondary">Home</a>
-            <a href="../login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
-            <a href="basket.php" class="btn btn-sm btn-outline-secondary">Basket</a>
-        <?php else: ?>
-            <a href="../login/register.php" class="btn btn-sm btn-outline-primary">Register</a>
-            <a href="../login/login.php" class="btn btn-sm btn-outline-secondary">Login</a>
-        <?php endif; ?>
+        <a href="../index.php" class="btn btn-sm btn-outline-secondary">Home</a>
+        <a href="all_product.php" class="btn btn-sm btn-outline-secondary">Continue Shopping</a>
+        <a href="../login/logout.php" class="btn btn-sm btn-outline-secondary">Logout</a>
     </header>
 
     <main>  
-  <div class="cart-container">
-    <div class="cart-card">
-      <h2>Your Shopping Cart</h2>
+        <div class="cart-container">
+            <div class="cart-card">
+                <h2 class="mb-4">Your Shopping Cart</h2>
 
-      <<?php if (!empty($cart_items)) { ?>
-        <table class="cart-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Image</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Subtotal</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="cartItems">
-            <?php foreach ($cart_items as $item) { ?>
-              <tr data-cart-id="<?= $item['cart_id']; ?>">
-                <td><?= htmlspecialchars($item['product_title']); ?></td>
-                <td><img src="../images/<?= htmlspecialchars($item['product_image']); ?>" alt="<?= htmlspecialchars($item['product_title']); ?>"></td>
-                <td>GHS <?= number_format($item['product_price'], 2); ?></td>
-                <td>
-                  <input type="number" class="qty-input" value="<?= $item['qty']; ?>" min="1" data-cart-id="<?= $item['cart_id']; ?>">
-                </td>
-                <td>GHS <?= number_format($item['product_price'] * $item['qty'], 2); ?></td>
-                <td>
-                  <button class="remove-btn" data-cart-id="<?= $item['cart_id']; ?>">Remove</button>
-                </td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
+                <?php if (!empty($cart_items)): ?>
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Image</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cartItems">
+                            <?php foreach ($cart_items as $item): ?>
+                                <tr data-product-id="<?= $item['product_id']; ?>">
+                                    <td><?= htmlspecialchars($item['product_title']); ?></td>
+                                    <td>
+                                        <img src="../uploads/<?= htmlspecialchars($item['product_image']); ?>" 
+                                             alt="<?= htmlspecialchars($item['product_title']); ?>"
+                                             onerror="this.src='../uploads/no-image.svg'">
+                                    </td>
+                                    <td>$<?= number_format($item['product_price'], 2); ?></td>
+                                    <td>
+                                        <input type="number" class="qty-input" value="<?= $item['qty']; ?>" 
+                                               min="1" data-product-id="<?= $item['product_id']; ?>">
+                                    </td>
+                                    <td class="subtotal">$<?= number_format($item['product_price'] * $item['qty'], 2); ?></td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm remove-btn" 
+                                                data-product-id="<?= $item['product_id']; ?>">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
 
-        <div class="cart-summary">
-          <h3>Total: <span id="cartTotal">
-            GHS <?= number_format(array_sum(array_map(fn($i) => $i['product_price'] * $i['qty'], $cart_items)), 2); ?>
-          </span></h3>
-          <div class="cart-actions">
-            <button onclick="window.location.href='all_product.php'">Continue Shopping</button>
-            <button id="emptyCartBtn">Empty Cart</button>
-            <button id="checkoutBtn">Proceed to Checkout</button>
-          </div>
+                    <div class="cart-summary">
+                        <h3>Cart Total: <span id="cartTotal">$<?= number_format($cart_total, 2); ?></span></h3>
+                        <div class="cart-actions">
+                            <button onclick="window.location.href='all_product.php'" class="btn btn-custom">
+                                Continue Shopping
+                            </button>
+                            <button id="emptyCartBtn" class="btn btn-outline-danger">Empty Cart</button>
+                            <button id="checkoutBtn" class="btn btn-custom">Proceed to Checkout</button>
+                        </div>
+                    </div>
+
+                <?php else: ?>
+                    <p class="empty-msg">Your cart is empty. <a href="all_product.php">Continue shopping</a>.</p>
+                <?php endif; ?>
+            </div>
         </div>
-
-      //<?php } else { ?>
-        //<p class="empty-msg">Your cart is empty. <a href="all_product.php">Continue shopping</a>.</p>
-      //<?php } ?>
-    </div>
-  </div>
-
     </main>
-
-
-  
-  
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/brand.js"></script>
-
-    
+    <script src="../js/cart.js"></script>
 </body>
-
 </html>

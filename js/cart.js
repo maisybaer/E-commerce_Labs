@@ -1,117 +1,192 @@
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(function() {
 
-    const cartContainer = document.getElementById("cartItems");
-    const emptyCartBtn = document.getElementById("emptyCartBtn");
-    const checkoutBtn = document.getElementById("checkoutBtn");
+    // Update quantity when input changes
+    $('.qty-input').on('change', function() {
+        const productId = $(this).data('product-id');
+        const qty = parseInt($(this).val());
 
-    // Function to fetch cart items
-    async function loadCart() {
-        const response = await fetch('get_cart_action.php'); // We'll create this in backend to get cart items
-        const data = await response.json();
-
-        if (data.status === 'success') {
-            renderCartItems(data.items);
-        } else {
-            cartContainer.innerHTML = "<p>Your cart is empty.</p>";
-        }
-    }
-
-    // Render cart items dynamically
-    function renderCartItems(items) {
-        if (!items.length) {
-            cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+        if (qty < 1) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Quantity',
+                text: 'Quantity must be at least 1',
+            });
+            $(this).val(1);
             return;
         }
 
-        cartContainer.innerHTML = '';
-        items.forEach(item => {
-            const subtotal = item.qty * item.product_price;
-            const row = document.createElement('div');
-            row.classList.add('cart-item');
-            row.innerHTML = `
-                <img src="${item.product_image}" alt="${item.product_title}" width="100">
-                <div class="details">
-                    <h4>${item.product_title}</h4>
-                    <p>$${item.product_price.toFixed(2)}</p>
-                    <input type="number" value="${item.qty}" min="1" data-id="${item.product_id}" class="qtyInput">
-                    <p>Subtotal: $${subtotal.toFixed(2)}</p>
-                    <button class="removeBtn" data-id="${item.product_id}">Remove</button>
-                </div>
-            `;
-            cartContainer.appendChild(row);
-        });
+        updateQuantity(productId, qty);
+    });
 
-        attachEventListeners();
-    }
-
-    // Attach event listeners for quantity and remove buttons
-    function attachEventListeners() {
-        const qtyInputs = document.querySelectorAll(".qtyInput");
-        qtyInputs.forEach(input => {
-            input.addEventListener("change", async (e) => {
-                const id = e.target.dataset.id;
-                const qty = parseInt(e.target.value);
-                await updateQuantity(id, qty);
-                loadCart();
-            });
-        });
-
-        const removeBtns = document.querySelectorAll(".removeBtn");
-        removeBtns.forEach(btn => {
-            btn.addEventListener("click", async (e) => {
-                const id = e.target.dataset.id;
-                await removeFromCart(id);
-                loadCart();
-            });
-        });
-    }
-
-    // Add to cart
-    async function addToCart(product_id, qty) {
-        const formData = new FormData();
-        formData.append("product_id", product_id);
-        formData.append("qty", qty);
-
-        const res = await fetch('add_to_cart_action.php', { method: 'POST', body: formData });
-        const data = await res.json();
-        alert(data.message);
-        loadCart();
-    }
-
-    // Remove from cart
-    async function removeFromCart(product_id) {
-        const formData = new FormData();
-        formData.append("product_id", product_id);
-
-        const res = await fetch('remove_from_cart_action.php', { method: 'POST', body: formData });
-        const data = await res.json();
-        alert(data.message);
-    }
-
-    // Update quantity
-    async function updateQuantity(product_id, qty) {
-        const formData = new FormData();
-        formData.append("product_id", product_id);
-        formData.append("qty", qty);
-
-        const res = await fetch('update_quantity_action.php', { method: 'POST', body: formData });
-        const data = await res.json();
-        if (data.status !== 'success') alert(data.message);
-    }
+    // Remove item from cart
+    $('.remove-btn').on('click', function() {
+        const productId = $(this).data('product-id');
+        removeFromCart(productId);
+    });
 
     // Empty cart
-    emptyCartBtn?.addEventListener("click", async () => {
-        const res = await fetch('empty_cart_action.php', { method: 'POST' });
-        const data = await res.json();
-        alert(data.message);
-        loadCart();
+    $('#emptyCartBtn').on('click', function() {
+        Swal.fire({
+            title: 'Empty Cart?',
+            text: 'Are you sure you want to remove all items from your cart?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, empty it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                emptyCart();
+            }
+        });
     });
 
-    // Checkout redirect
-    checkoutBtn?.addEventListener("click", () => {
-        window.location.href = "checkout.php";
+    // Proceed to checkout
+    $('#checkoutBtn').on('click', function() {
+        window.location.href = 'checkout.php';
     });
 
-    // Initial load
-    loadCart();
+    // Function to update quantity
+    function updateQuantity(productId, qty) {
+        $.ajax({
+            url: '../actions/update_quantity_action.php',
+            method: 'POST',
+            data: { product_id: productId, qty: qty },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    // Update subtotal
+                    updateCartDisplay();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated',
+                        text: response.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to update quantity. Please try again.'
+                });
+            }
+        });
+    }
+
+    // Function to remove item from cart
+    function removeFromCart(productId) {
+        Swal.fire({
+            title: 'Remove Item?',
+            text: 'Are you sure you want to remove this item from your cart?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '../actions/remove_from_cart_action.php',
+                    method: 'POST',
+                    data: { product_id: productId },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // Remove the row from table
+                            $(`tr[data-product-id="${productId}"]`).fadeOut(300, function() {
+                                $(this).remove();
+                                updateCartDisplay();
+                                checkEmptyCart();
+                            });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Removed',
+                                text: response.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to remove item. Please try again.'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    // Function to empty cart
+    function emptyCart() {
+        $.ajax({
+            url: '../actions/empty_cart_action.php',
+            method: 'POST',
+            dataType: 'json',
+            success: function(response) {
+                if (response.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Cart Emptied',
+                        text: response.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to empty cart. Please try again.'
+                });
+            }
+        });
+    }
+
+    // Function to update cart display (recalculate totals)
+    function updateCartDisplay() {
+        let total = 0;
+        $('#cartItems tr').each(function() {
+            const qty = parseInt($(this).find('.qty-input').val());
+            const priceText = $(this).find('td:eq(2)').text().replace('$', '');
+            const price = parseFloat(priceText);
+            const subtotal = qty * price;
+            
+            $(this).find('.subtotal').text('$' + subtotal.toFixed(2));
+            total += subtotal;
+        });
+        
+        $('#cartTotal').text('$' + total.toFixed(2));
+    }
+
+    // Function to check if cart is empty
+    function checkEmptyCart() {
+        if ($('#cartItems tr').length === 0) {
+            $('.cart-card').html('<p class="empty-msg">Your cart is empty. <a href="all_product.php">Continue shopping</a>.</p>');
+        }
+    }
 });

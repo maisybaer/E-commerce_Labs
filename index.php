@@ -51,7 +51,7 @@ $role = getUserRole();
 			<?php if ($role == 1) : ?>
 				<h1>Welcome <?php echo htmlspecialchars($customer_name ?: 'Admin'); ?></h1>
 			<?php elseif ($role == 2) : ?>
-				<h1>Welcome <?php echo htmlspecialchars($customer_name ?: 'Guest'); ?>!</h1>
+				<h1>Welcome <?php echo htmlspecialchars($customer_name ?: ''); ?>!</h1>
 				<p class="lead">Find something special in the shop below.</p>
 			<?php endif; ?>
 		</div>

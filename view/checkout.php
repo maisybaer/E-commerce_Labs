@@ -96,6 +96,47 @@ if (!empty($cart_items)) {
     <main>
         <div class="checkout-container">
             <h1 class="text-center mb-4">Checkout</h1>
+            
+            <div class="checkout-summary">
+            <h4 class="text-center mb-4">Enter your shipping information</h4>
+            <form>
+            <table>
+                <tr>
+                    <td><label for="name">First Name:</label></td>
+                    <td><input type="text" id="name" name="name" required></td>
+                </tr>
+                <tr>
+                    <td><label for="name">Last Name:</label></td>
+                    <td><input type="text" id="name" name="name" required></td>
+                </tr>
+                <tr>
+                    <td><label for="address">Address Line 1:</label></td>
+                    <td><input type="text" id="address" name="address" required></td>
+                </tr>
+                <tr>
+                    <td><label for="address">Address Line 2:</label></td>
+                    <td><input type="text" id="address" name="address" required></td>
+                </tr>
+                <tr>
+                    <td><label for="payment">Payment Method:</label></td>
+                    <td>
+                        <div class="form-check custom-radio">
+                        <input class="form-check-input" type="radio" name="payment_method" id="payment_method" value="Credit Card">
+                        <label class="form-check-label" for="payment_method">Credit Card</label>
+                    </div>
+                    <div class="form-check custom-radio">
+                        <input class="form-check-input" type="radio" name="payment_method" id="payment_method" value="Mobile Money">
+                        <label class="form-check-label" for="payment_method">Mobile Money</label>
+                    </div>
+                    <div class="form-check custom-radio">
+                        <input class="form-check-input" type="radio" name="payment_method" id="payment_method" value="Cash on Delivery">
+                        <label class="form-check-label" for="payment_method">Cash on Delivery</label>
+                    </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        </div><br>
 
             <?php if (!empty($cart_items)): ?>
                 <div class="checkout-summary">
@@ -120,7 +161,7 @@ if (!empty($cart_items)) {
 
                     <div class="text-center mt-4">
                         <button id="simulatePayBtn" class="btn btn-custom btn-lg">
-                            <i class="fas fa-credit-card"></i> Simulate Payment
+                            <i class="fas fa-credit-card"></i> Confirm Payment
                         </button>
                     </div>
                 </div>
@@ -129,7 +170,7 @@ if (!empty($cart_items)) {
                 <div id="paymentModal" class="payment-modal">
                     <div class="modal-content">
                         <h2 class="mb-3">Confirm Payment</h2>
-                        <p class="text-muted">This is a simulated payment. Click confirm to proceed.</p>
+                        <p class="text-muted">Click confirm to proceed.</p>
                         <p class="mt-3"><strong>Total Amount: $<?= number_format($cart_total, 2); ?></strong></p>
                         <div class="modal-buttons">
                             <button id="confirmPayBtn" class="btn btn-custom btn-lg">

@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="form-check custom-radio">
                                         <input class="form-check-input" type="radio" name="role" id="owner" value="1">
-                                        <label class="form-check-label" for="owner">Restaurant Owner</label>
+                                        <label class="form-check-label" for="owner">Admin</label>
                                     </div>
                                 </div>
                             </div>

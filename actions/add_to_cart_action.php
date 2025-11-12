@@ -1,7 +1,8 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../controllers/cart_controller.php';
-require_once '../settings/core.php';
 
 header('Content-Type: application/json');
 

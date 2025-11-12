@@ -206,7 +206,7 @@ function openForm(product) {
     const keyField = document.getElementById('updateProductKey'); if (keyField) keyField.value = product.product_keywords || product.productKey || '';
 
     // Populate dropdowns (pass ids) - wait for them to load before showing popup so selection is visible
-    populateDropdowns(product.product_cat || product.productCat || '', product.product_brand || product.productBrand || '')
+    populateDropdowns(product)
         .then(() => {
             const popup = document.getElementById('updatePopupContainer');
             if (popup) popup.style.display = 'block';
@@ -298,34 +298,67 @@ function closeForm() {
             });
     }
 
-function populateDropdowns(selectedCat, selectedBrand) {
-        // Fetch category and brand lists from the PHP side
+function populateDropdowns(productMeta = {}) {
+        const {
+            product_cat: catId,
+            productCat,
+            category: catName,
+            product_brand: brandId,
+            productBrand,
+            brand: brandName
+        } = productMeta || {};
+
+        const desiredCatId = catId ?? productCat ?? '';
+        const desiredCatName = (catName ?? '').toString().trim().toLowerCase();
+        const desiredBrandId = brandId ?? productBrand ?? '';
+        const desiredBrandName = (brandName ?? '').toString().trim().toLowerCase();
+
         const catPromise = fetch("../actions/fetch_category_action.php")
             .then(res => res.json())
             .then(cats => {
-                let catSelect = document.getElementById("updateProductCat");
+                const catSelect = document.getElementById("updateProductCat");
                 if (!catSelect) return;
+
                 catSelect.innerHTML = `<option value="">Select Category</option>`;
                 cats.forEach(c => {
-                    catSelect.innerHTML += `<option value="${c.cat_id}">${c.cat_name}</option>`;
+                    const option = document.createElement('option');
+                    option.value = c.cat_id;
+                    option.textContent = c.cat_name;
+                    catSelect.appendChild(option);
                 });
-                // try to set selected by id (coerce to string)
-                if (selectedCat !== undefined && selectedCat !== null && selectedCat !== '') {
-                    catSelect.value = String(selectedCat);
+
+                if (desiredCatId !== undefined && desiredCatId !== null && desiredCatId !== '') {
+                    catSelect.value = String(desiredCatId);
+                }
+
+                // Fallback: match by name if id selection failed
+                if (!catSelect.value && desiredCatName) {
+                    const match = Array.from(catSelect.options).find(opt => opt.textContent.trim().toLowerCase() === desiredCatName);
+                    if (match) catSelect.value = match.value;
                 }
             });
 
         const brandPromise = fetch("../actions/fetch_brand_action.php")
             .then(res => res.json())
             .then(brands => {
-                let brandSelect = document.getElementById("updateProductBrand");
+                const brandSelect = document.getElementById("updateProductBrand");
                 if (!brandSelect) return;
+
                 brandSelect.innerHTML = `<option value="">Select Brand</option>`;
                 brands.forEach(b => {
-                    brandSelect.innerHTML += `<option value="${b.brand_id}">${b.brand_name}</option>`;
+                    const option = document.createElement('option');
+                    option.value = b.brand_id;
+                    option.textContent = b.brand_name;
+                    brandSelect.appendChild(option);
                 });
-                if (selectedBrand !== undefined && selectedBrand !== null && selectedBrand !== '') {
-                    brandSelect.value = String(selectedBrand);
+
+                if (desiredBrandId !== undefined && desiredBrandId !== null && desiredBrandId !== '') {
+                    brandSelect.value = String(desiredBrandId);
+                }
+
+                if (!brandSelect.value && desiredBrandName) {
+                    const match = Array.from(brandSelect.options).find(opt => opt.textContent.trim().toLowerCase() === desiredBrandName);
+                    if (match) brandSelect.value = match.value;
                 }
             });
 

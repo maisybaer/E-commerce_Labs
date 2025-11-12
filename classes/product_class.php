@@ -15,17 +15,22 @@ class Product extends db_connection
     //function to add product
     public function addProduct($productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey, $user_id)
     {
-        $stmt = $this->db->prepare("INSERT INTO products(product_cat, product_brand, product_title, product_price, product_desc, product_image, product_keywords, added_by) values(?,?,?,?,?,?,?,?)");
-        $stmt->bind_param("sssisssi",$productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey, $user_id);
+        $stmt = $this->db->prepare("INSERT INTO products (product_cat, product_brand, product_title, product_price, product_desc, product_image, product_keywords, added_by) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("iisdsssi", $productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey, $user_id);
         return $stmt->execute();
     }
 
     //function to update product
     public function updateProduct($product_id, $productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey)
     {
-    $stmt = $this->db->prepare("UPDATE products SET product_brand = ?, product_cat=?, product_title=?, product_price=?, product_desc=?, product_image=?, product_keywords=?  WHERE product_id = ?");
-    $stmt->bind_param("sssisssi",$productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey, $product_id);
-    return $stmt->execute();
+        if (!empty($productImage)) {
+            $stmt = $this->db->prepare("UPDATE products SET product_cat = ?, product_brand = ?, product_title = ?, product_price = ?, product_desc = ?, product_image = ?, product_keywords = ? WHERE product_id = ?");
+            $stmt->bind_param("iisdsssi", $productCat, $productBrand, $productTitle, $productPrice, $productDes, $productImage, $productKey, $product_id);
+        } else {
+            $stmt = $this->db->prepare("UPDATE products SET product_cat = ?, product_brand = ?, product_title = ?, product_price = ?, product_desc = ?, product_keywords = ? WHERE product_id = ?");
+            $stmt->bind_param("iisdssi", $productCat, $productBrand, $productTitle, $productPrice, $productDes, $productKey, $product_id);
+        }
+        return $stmt->execute();
     }
 
     //function to delete product

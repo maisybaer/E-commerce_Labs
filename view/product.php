@@ -2,7 +2,6 @@
 //session_start();
 
 require_once '../settings/core.php';
-require_once '../settings/db_class.php';
 
 $products = get_all_products_ctr();
 

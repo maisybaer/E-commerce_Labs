@@ -120,6 +120,17 @@ if ($product_id > 0) {
                             <p><strong>Price:</strong> $<?php echo htmlspecialchars($product['product_price']); ?></p>
                             <p><strong>Description:</strong><br><?php echo nl2br(htmlspecialchars($product['product_desc'] ?? '')); ?></p>
                             <p><strong>Keywords:</strong> <?php echo htmlspecialchars($product['product_keywords'] ?? ''); ?></p>
+                            <div class="mt-3">
+                                <label for="productQuantity" class="form-label fw-semibold">Quantity</label>
+                                <input
+                                    type="number"
+                                    id="productQuantity"
+                                    name="quantity"
+                                    class="form-control"
+                                    min="1"
+                                    value="1"
+                                >
+                            </div>
                         </div>
                         <div class="card-footer text-center">
                             <form action="#" method="POST">
@@ -143,11 +154,21 @@ if ($product_id > 0) {
             $('#addToCartBtn').on('click', function(e){
                 e.preventDefault();
                 const productId = $(this).data('id');
+                const quantity = parseInt($('#productQuantity').val(), 10) || 1;
+
+                if (quantity <= 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Invalid quantity',
+                        text: 'Please enter a quantity of at least 1.'
+                    });
+                    return;
+                }
                 
                 $.ajax({
                     url: '../actions/add_to_cart_action.php',
                     method: 'POST',
-                    data: { product_id: productId, quantity: 1 },
+                    data: { product_id: productId, quantity: quantity },
                     dataType: 'json',
                     success: function(response) {
                         if(response.status === 'success'){
